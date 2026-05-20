@@ -36,22 +36,29 @@ Le projet est développé sans framework backend ni frontend, conformément aux 
 
 ## ⚙️ Installation de l'environnement
 
-> Cette section couvre l'installation complète sur **Linux Mint / Ubuntu** depuis un système vierge.  
+> Cette section couvre l'installation complète depuis un système vierge.  
 > Si Git, Docker et Composer sont déjà installés, passez directement au [Démarrage rapide](#-démarrage-rapide).
 
-### 1. Mettre le système à jour
+---
+
+### 🐧 Linux Mint / Ubuntu
+
+<details>
+<summary><b>Cliquez pour afficher les instructions Ubuntu / Mint</b></summary>
+
+#### 1. Mettre le système à jour
 
 ```bash
 sudo apt update && sudo apt upgrade -y
 ```
 
-### 2. Installer Git et les dépendances
+#### 2. Installer Git et les dépendances
 
 ```bash
 sudo apt install -y git ca-certificates curl gnupg lsb-release software-properties-common unzip php-cli
 ```
 
-### 3. Installer Docker + Docker Compose
+#### 3. Installer Docker + Docker Compose
 
 **Ajouter la clé et le dépôt Docker :**
 
@@ -64,7 +71,7 @@ sudo apt update
 sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
 
-### 4. Installer les extensions PHP requises
+#### 4. Installer les extensions PHP requises
 
 ```bash
 sudo apt install -y php-mysql php-xml
@@ -73,7 +80,7 @@ php -m | grep -i dom
 
 > L'extension `dom` doit apparaître dans la liste — elle est requise par PHPUnit.
 
-### 5. Installer Composer
+#### 5. Installer Composer
 
 ```bash
 php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
@@ -82,6 +89,82 @@ sudo mv composer.phar /usr/local/bin/composer
 php -r "unlink('composer-setup.php');"
 composer --version
 ```
+
+</details>
+
+---
+
+### 🐧 CachyOS / Arch Linux
+
+<details>
+<summary><b>Cliquez pour afficher les instructions CachyOS / Arch</b></summary>
+
+#### 1. Mettre le système à jour
+
+```bash
+sudo pacman -Syu
+```
+
+#### 2. Installer Git, PHP et Composer
+
+```bash
+sudo pacman -S --needed git curl unzip php composer
+```
+
+#### 3. Installer Docker + Docker Compose
+
+Docker Compose v2 est inclus dans le paquet `docker` sur Arch :
+
+```bash
+sudo pacman -S --needed docker
+```
+
+**Activer et démarrer le service Docker :**
+
+```bash
+sudo systemctl enable --now docker
+```
+
+**Ajouter votre utilisateur au groupe `docker`** (évite `sudo` à chaque commande) :
+
+```bash
+sudo usermod -aG docker $USER
+```
+
+> ⚠️ Vous devez vous **déconnecter/reconnecter** (ou relancer votre session) pour que le groupe soit pris en compte. Vérifiez avec `groups | grep docker`.
+
+#### 4. Activer les extensions PHP requises
+
+Sur Arch/CachyOS, activez les modules dynamiques dans `/etc/php/php.ini` :
+
+```bash
+sudo nano /etc/php/php.ini
+```
+
+Décommentez uniquement ces lignes (retirez le `;`) :
+
+```ini
+extension=pdo_mysql
+extension=mysqli
+```
+
+> ⚠️ Ne pas décommenter `extension=dom` ni `extension=openssl` — ils sont compilés statiquement dans le binaire PHP d'Arch. Les décommenter génère des warnings car le `.so` n'existe pas.
+
+Vérifiez que tout est chargé sans warning :
+
+```bash
+php -m | grep -iE 'dom|openssl|pdo_mysql'
+```
+
+#### 5. Vérifier Composer
+
+Composer est installé via pacman à l'étape 2 :
+
+```bash
+composer --version
+```
+
+</details>
 
 ---
 
@@ -94,9 +177,13 @@ composer --version
 - [Composer](https://getcomposer.org/) (dépendances PHP locales)
 
 > **⚠️ Ports requis :** `80` (HTTP) et `443` (HTTPS)  
-> Si Apache tourne déjà sur votre machine, libérez les ports avant de lancer :
+> Si un serveur web tourne déjà sur votre machine, libérez les ports avant de lancer :
 > ```bash
+> # Ubuntu / Mint
 > sudo systemctl stop apache2 && sudo systemctl disable apache2
+>
+> # CachyOS / Arch
+> sudo systemctl stop httpd && sudo systemctl disable httpd
 > ```
 
 ### Installation
@@ -146,10 +233,10 @@ docker compose logs --tail=50 db
 
 | Environnement | URL |
 |---|---|
-| Application (Vhost PROD) | [http://prod.stageflow.fr](http://prod.stageflow.fr) |
-| Assets et médias (Vhost CDN) | [http://cdn.stageflow.fr](http://cdn.stageflow.fr) |
+| Application (Vhost PROD) | [https://prod.stageflow.fr](https://prod.stageflow.fr) |
+| Assets et médias (Vhost CDN) | [https://cdn.stageflow.fr](https://cdn.stageflow.fr) |
 
-> L'accès se fait directement sur le port 80, sans numéro de port dans l'URL.
+> La conf Apache redirige HTTP vers HTTPS. Acceptez le certificat auto-signé dans votre navigateur.
 
 ## 🗄️ Base de données
 
@@ -326,7 +413,6 @@ bash scripts/units.sh
 docker compose run --rm phpunit
 ```
 
-
 ## 🔀 Workflow Git
 
 Le projet suit une organisation proche de **Git Flow** :
@@ -367,7 +453,6 @@ bash scripts/wipe_volumes_clean.sh  # Réinitialise les volumes Docker (BDD comp
 | `web` | `lamp-web` | Apache + PHP, sert à la fois `prod.stageflow.fr` et `cdn.stageflow.fr` |
 | `db` | `lamp-db` | Base de données MySQL |
 | `phpunit` | `lamp-tests` | Exécution des tests automatisés |
-
 
 #### Note légale
 

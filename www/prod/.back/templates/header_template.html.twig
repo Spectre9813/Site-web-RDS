@@ -8,7 +8,7 @@
 
 <header id="page-header">
 	<div class="header-inner">
-		<a href="/" class="logo" aria-label="Retour � l'accueil StageFlow">StageFlow</a>
+		<a href="/" class="logo" aria-label="Retour à l'accueil StageFlow">StageFlow</a>
 
 		<button
 				class="burger"
@@ -26,7 +26,7 @@
 		<nav id="main-nav" aria-label="Navigation principale">
 			<div class="nav-content">
 				<a href="/app/offers">Offres</a>
-				<a href="/legals">Mentions l�gales</a>
+				<a href="/legals">Mentions légales</a>
 
 				{% if isLoggedIn %}
 					<hr class="nav-divider">
@@ -51,7 +51,7 @@
 						<a href="/dashboard/applications">Mes candidatures</a>
 					{% endif %}
 
-					<a href="/logout" class="logout-link">D�connexion</a>
+					<a href="/logout" class="logout-link">Déconnexion</a>
 				{% else %}
 					<hr class="nav-divider">
 					<a href="/login">Connexion</a>
@@ -61,7 +61,7 @@
 				<hr class="nav-divider">
 
 				<div class="nav-footer">
-					<span>Th�me</span>
+					<span>Thème</span>
 					<button id="theme-toggle" class="btn btn-theme" type="button">? Dark</button>
 				</div>
 			</div>
@@ -202,7 +202,7 @@
 			burger.setAttribute('aria-expanded', String(isOpen));
 		});
 
-		// Fermeture au clic � l'ext�rieur
+		// Fermeture au clic à l'extérieur
 		document.addEventListener('click', function (event) {
 			if (!nav.contains(event.target) && !burger.contains(event.target)) {
 				nav.classList.remove('is-open');
@@ -210,7 +210,7 @@
 			}
 		});
 
-		// Fermeture avec la touche �chap
+		// Fermeture avec la touche Échap
 		document.addEventListener('keydown', function (event) {
 			if (event.key === 'Escape') {
 				nav.classList.remove('is-open');
@@ -218,7 +218,7 @@
 			}
 		});
 
-		// Logique du th�me
+		// Logique du thème
 		const setTheme = function (theme) {
 			if (theme === 'dark') {
 				document.documentElement.setAttribute('data-theme', 'dark');

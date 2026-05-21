@@ -24,14 +24,14 @@ ROUTE: GET /app/offers/{id}/apply | POST /app/offers/{id}/apply
 	<div class="page-header">
 		<div>
 			<a href="/app/offers/show/{{ offer.id }}" class="btn btn-ghost" style="border: none; padding-left: 0;">
-				? Retour � l'offre
+				← Retour à l'offre
 			</a>
-			<h1 class="mt-1">Postuler � cette offre</h1>
+			<h1 class="mt-1">Postuler à cette offre</h1>
 			<p>
 				{{ offer.title }}
 				?
 				<strong>{{ offer.company_name }}</strong>
-				�
+				à
 				{{ offer.location }}
 			</p>
 		</div>
@@ -64,7 +64,7 @@ ROUTE: GET /app/offers/{id}/apply | POST /app/offers/{id}/apply
 						<span class="data-value">{{ offer.hourly_rate|default('N/C') }} ?/h</span>
 					</div>
 					<div class="data-item">
-						<span class="data-label">Dur�e</span>
+						<span class="data-label">Durée</span>
 						<span class="data-value">{{ offer.duration_weeks|default('?') }} semaines</span>
 					</div>
 				</div>
@@ -78,7 +78,7 @@ ROUTE: GET /app/offers/{id}/apply | POST /app/offers/{id}/apply
 
 				<div class="data-grid">
 					<div class="data-item">
-						<span class="data-label">Pr�nom</span>
+						<span class="data-label">Prénom</span>
 						<span class="data-value">{{ currentUser.first_name|default(user.first_name|default('')) }}</span>
 					</div>
 					<div class="data-item">
@@ -112,7 +112,7 @@ ROUTE: GET /app/offers/{id}/apply | POST /app/offers/{id}/apply
 				</div>
 
 				{% if applications|default(0) > 10 %}
-					<p class="text-xs text-muted mt-2">? Offre tr�s demand�e !</p>
+					<p class="text-xs text-muted mt-2">🔥 Offre très demandée !</p>
 				{% endif %}
 			</div>
 		</aside>
@@ -125,25 +125,25 @@ ROUTE: GET /app/offers/{id}/apply | POST /app/offers/{id}/apply
 				{# SECTION 1: CV #}
 				<div class="form-section-header" style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
 					<h3 class="text-sm" style="text-transform: uppercase; letter-spacing: 1px; color: var(--primary-color);">
-						01. Curriculum Vit�
+						01. Curriculum Vitæ
 					</h3>
 				</div>
 
 				<div class="form-group mb-3">
-					<label for="cv_id">Choisir un CV d�j� utilis�</label>
+					<label for="cv_id">Choisir un CV déjà utilisé</label>
 					<select name="cv_path" id="cv_id">
 						<option value="" selected>? Chargement de vos CVs? ?</option>
 					</select>
 				</div>
 
 				<p class="text-sm text-muted" style="text-align: center; margin: 1rem 0;">
-					? ou d�posez un nouveau fichier ?
+					 ou déposez un nouveau fichier ?
 				</p>
 
 				<div class="form-group mb-3">
 					<label id="cv-drop-zone" class="file-dropzone">
 						<span id="cv-drop-icon" class="file-dropzone-icon">?</span>
-						<p id="cv-drop-label" class="file-dropzone-title">D�posez votre CV ici</p>
+						<p id="cv-drop-label" class="file-dropzone-title">Déposez votre CV ici</p>
 						<p class="file-dropzone-subtitle">ou cliquez pour parcourir (PDF max 2 Mo)</p>
 						<input type="file" name="cv_file" id="cv_file_input" accept=".pdf" class="file-input-hidden">
 					</label>
@@ -164,13 +164,13 @@ ROUTE: GET /app/offers/{id}/apply | POST /app/offers/{id}/apply
 				</div>
 
 				<p class="text-sm text-muted" style="text-align: center; margin: 1rem 0;">
-					? ou d�posez un nouveau fichier ?
+					 ou déposez un nouveau fichier ?
 				</p>
 
 				<div class="form-group mb-3">
 					<label id="motivation-drop-zone" class="file-dropzone">
 						<span id="motivation-drop-icon" class="file-dropzone-icon">?</span>
-						<p id="motivation-drop-label" class="file-dropzone-title">D�posez votre lettre ici</p>
+						<p id="motivation-drop-label" class="file-dropzone-title">Déposez votre lettre ici</p>
 						<p class="file-dropzone-subtitle">ou cliquez pour parcourir (PDF max 2 Mo)</p>
 						<input type="file" name="cover_letter_file" id="motivation_file_input" accept=".pdf" class="file-input-hidden">
 					</label>
@@ -210,12 +210,12 @@ ROUTE: GET /app/offers/{id}/apply | POST /app/offers/{id}/apply
 						(file.name && file.name.toLowerCase().endsWith('.pdf'));
 
 				if (!isPDF) {
-					alert('Seuls les fichiers PDF sont accept�s.');
+					alert('Seuls les fichiers PDF sont acceptés.');
 					return false;
 				}
 
 				if (file.size > 2 * 1024 * 1024) {
-					alert('Le fichier d�passe la limite de 2 Mo.');
+					alert('Le fichier dépasse la limite de 2 Mo.');
 					return false;
 				}
 
@@ -246,7 +246,7 @@ ROUTE: GET /app/offers/{id}/apply | POST /app/offers/{id}/apply
 					selectEl.innerHTML = '';
 
 					if (!files || files.length === 0) {
-						selectEl.innerHTML = '<option value="" disabled selected>? Aucun fichier enregistr� ?</option>';
+						selectEl.innerHTML = '<option value="" disabled selected>? Aucun fichier enregistré ?</option>';
 						return;
 					}
 
@@ -315,11 +315,11 @@ ROUTE: GET /app/offers/{id}/apply | POST /app/offers/{id}/apply
 			}
 
 			// Initialization
-			loadExistingFiles('/api/profile/get-cvs', cvSelect, '? S�lectionner un CV ?');
-			loadExistingFiles('/api/profile/get-lms', lmSelect, '? S�lectionner une lettre ?');
+			loadExistingFiles('/api/profile/get-cvs', cvSelect, '– Sélectionner un CV –');
+			loadExistingFiles('/api/profile/get-lms', lmSelect, '– Sélectionner une lettre ?');
 
-			bindDropZone(cvDropZone, cvInput, cvSelect, cvIcon, cvLabel, 'D�posez votre CV ici');
-			bindDropZone(lmDropZone, lmInput, lmSelect, lmIcon, lmLabel, 'D�posez votre lettre ici');
+			bindDropZone(cvDropZone, cvInput, cvSelect, cvIcon, cvLabel, 'Déposez votre CV ici');
+			bindDropZone(lmDropZone, lmInput, lmSelect, lmIcon, lmLabel, 'Déposez votre lettre ici');
 
 			form.addEventListener('submit', (e) => {
 				if (cvSelect.value === '' && cvInput.files.length === 0) {

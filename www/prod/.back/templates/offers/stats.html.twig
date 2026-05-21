@@ -3,14 +3,14 @@
 {% block title %}Statistiques des offres ? StageFlow{% endblock %}
 
 {% block meta_description %}
-    Consultez les statistiques principales de StageFlow : r�partition des offres par dur�e, top des offres ajout�es en wishlist et volume global des candidatures.
+    Consultez les statistiques principales de StageFlow : répartition des offres par durée, top des offres ajoutées en wishlist et volume global des candidatures.
 {% endblock %}
 
 {% block body %}
     <div class="page-header">
         <div>
             <h1>Statistiques des offres</h1>
-            <p>Vue synth�tique des indicateurs cl�s de la plateforme.</p>
+            <p>Vue synthétique des indicateurs clés de la plateforme.</p>
         </div>
 
         <a href="/app/offers" class="btn btn-ghost">? Retour aux offres</a>
@@ -19,7 +19,7 @@
     <section class="card stats-carousel" data-carousel tabindex="0" aria-label="Carrousel des statistiques">
         <div class="stats-carousel-track" data-carousel-track>
             <article class="stats-slide is-active" aria-live="polite">
-                <h2>R�partition par dur�e</h2>
+                <h2>Répartition par durée</h2>
 
                 <ul class="stats-list">
                     {% for item in duration_breakdown|default([]) %}
@@ -28,13 +28,13 @@
                             <span>{{ item.value }}</span>
                         </li>
                     {% else %}
-                        <li>Aucune donn�e disponible.</li>
+                        <li>Aucune donnée disponible.</li>
                     {% endfor %}
                 </ul>
             </article>
 
             <article class="stats-slide" aria-live="polite">
-                <h2>Top des offres les plus ajout�es en wishlist</h2>
+                <h2>Top des offres les plus ajoutées en wishlist</h2>
 
                 <ol class="stats-list">
                     {% for item in top_wishlist|default([]) %}
@@ -43,7 +43,7 @@
                             <span>{{ item.value }}</span>
                         </li>
                     {% else %}
-                        <li>Aucune donn�e disponible.</li>
+                        <li>Aucune donnée disponible.</li>
                     {% endfor %}
                 </ol>
             </article>
@@ -68,7 +68,7 @@
                 </div>
 
                 <p class="text-sm text-muted" style="margin-top: 1rem;">
-                    Ces indicateurs permettent d?identifier rapidement les offres les plus attractives et les tendances de la plateforme.
+                    Ces indicateurs permettent d’identifier rapidement les offres les plus attractives et les tendances de la plateforme.
                 </p>
             </article>
         </div>
@@ -78,9 +78,9 @@
                     type="button"
                     class="btn btn-ghost"
                     data-carousel-prev
-                    aria-label="Carte pr�c�dente"
+                    aria-label="Carte précédente"
             >
-                ? Pr�c�dent
+                ‹ Précédent
             </button>
 
             <div class="stats-carousel-dots" data-carousel-dots></div>

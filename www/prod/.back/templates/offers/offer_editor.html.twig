@@ -7,8 +7,8 @@
 {% block dashboard_content %}
     <div class="page-header">
         <div>
-            <h1>{{ mode == 'edit' ? "�dition de l'offre" : 'Nouvelle publication' }}</h1>
-            <p>Diffusez vos opportunit�s de stage au sein du r�seau CESI.</p>
+            <h1>{{ mode == 'edit' ? "Édition de l'offre" : 'Nouvelle publication' }}</h1>
+            <p>Diffusez vos opportunités de stage au sein du réseau CESI.</p>
         </div>
     </div>
 
@@ -38,7 +38,7 @@
                                 name="title"
                                 id="title"
                                 value="{{ offer.title|default('') }}"
-                                placeholder="ex: D�veloppeur PHP Fullstack (H/F)"
+                                placeholder="ex: Développeur PHP Fullstack (H/F)"
                                 required
                         >
                     </div>
@@ -87,7 +87,7 @@
                                     </option>
                                 {% endfor %}
                             {% else %}
-                                <option value="">? S�lectionnez d'abord une entreprise ?</option>
+                                <option value="">– Sélectionnez d'abord une entreprise ?</option>
                             {% endif %}
                         </select>
                     </div>
@@ -107,21 +107,21 @@
             </div>
 
             <div class="info-section">
-                <span class="section-label">Missions & comp�tences</span>
+                <span class="section-label">Missions & compétences</span>
 
                 <div class="form-grid">
                     <div class="form-group span-full">
-                        <label for="description">Description d�taill�e</label>
+                        <label for="description">Description détaillée</label>
                         <textarea
                                 name="description"
                                 id="description"
                                 rows="8"
-                                placeholder="D�crivez les missions, l'�quipe et l'environnement technique..."
+                                placeholder="Décrivez les missions, l'équipe et l'environnement technique..."
                         >{{ offer.description|default('') }}</textarea>
                     </div>
 
                     <div class="form-group">
-                        <label for="start_date">Date de d�but pr�vue</label>
+                        <label for="start_date">Date de début prévue</label>
                         <input
                                 type="date"
                                 name="start_date"
@@ -131,7 +131,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="duration_weeks">Dur�e (en semaines)</label>
+                        <label for="duration_weeks">Durée (en semaines)</label>
                         <input
                                 type="number"
                                 name="duration_weeks"
@@ -144,14 +144,14 @@
             </div>
 
             <div class="info-section">
-                <span class="section-label">Comp�tences requises</span>
+                <span class="section-label">Compétences requises</span>
 
                 <div class="form-grid">
                     <div class="form-group span-full">
-                        <label for="required_skills_container">Comp�tences</label>
+                        <label for="required_skills_container">Compétences</label>
 
                         <div id="required_skills_container" class="skills-container">
-                            <input type="text" id="skills_input" placeholder="Tapez et s�lectionnez des comp�tences...">
+                            <input type="text" id="skills_input" placeholder="Tapez et sélectionnez des compétences...">
                         </div>
 
                         <input
@@ -162,24 +162,24 @@
                         >
 
                         <small class="form-help">
-                            S�parez chaque comp�tence par une virgule ou s�lectionnez dans la liste.
+                            Séparez chaque compétence par une virgule ou sélectionnez dans la liste.
                         </small>
                     </div>
                 </div>
             </div>
 
             <div class="info-section">
-                <span class="section-label">Param�tres de publication</span>
+                <span class="section-label">Paramètres de publication</span>
 
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="is_active">Visibilit�</label>
+                        <label for="is_active">Visibilité</label>
                         <select name="is_active" id="is_active">
                             <option value="1" {{ offer.is_active|default(true) ? 'selected' : '' }}>
-                                Publi�e (visible)
+                                Publiée (visible)
                             </option>
                             <option value="0" {{ offer.is_active is defined and not offer.is_active ? 'selected' : '' }}>
-                                Brouillon (masqu�e)
+                                Brouillon (masquée)
                             </option>
                         </select>
                     </div>
@@ -189,7 +189,7 @@
             <div class="form-actions">
                 <a href="/dashboard/offers" class="btn btn-ghost">Annuler</a>
                 <button type="submit" class="btn btn-primary">
-                    {{ mode == 'edit' ? 'Mettre � jour' : "Publier l'offre" }}
+                    {{ mode == 'edit' ? 'Mettre à jour' : "Publier l'offre" }}
                 </button>
             </div>
         </form>
@@ -248,7 +248,7 @@
 
                     const btn = document.createElement('button');
                     btn.type = 'button';
-                    btn.textContent = '�';
+                    btn.textContent = '✓';
                     btn.addEventListener('click', () => {
                         tags.splice(index, 1);
                         updateHiddenInput();
@@ -384,7 +384,7 @@
                 siteSelect.disabled = true;
 
                 if (!companyId) {
-                    siteSelect.innerHTML = '<option value="">? S�lectionnez d\'abord une entreprise ?</option>';
+                    siteSelect.innerHTML = '<option value="">– Sélectionnez d\'abord une entreprise ?</option>';
                     return;
                 }
 
@@ -402,7 +402,7 @@
                     const sites = await res.json();
 
                     if (!sites.length) {
-                        siteSelect.innerHTML = '<option value="">Aucun site trouv� pour cette entreprise</option>';
+                        siteSelect.innerHTML = '<option value="">Aucun site trouvé pour cette entreprise</option>';
                         return;
                     }
 

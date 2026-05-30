@@ -2,14 +2,14 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    {# Compatibilit� : gestion robuste des r�les en BackedEnum ou string brut #}
+    {# Compatibilité : gestion robuste des rôles en BackedEnum ou string brut #}
     {% set role = user.role.value|default(user.role|default('guest')) %}
 
     <div class="dashboard-shell">
         <aside class="dashboard-sidebar">
             <div class="dashboard-sidebar-header">
                 <h1 class="dashboard-sidebar-title">Dashboard</h1>
-                <p class="dashboard-role">R�le : {{ role|upper }}</p>
+                <p class="dashboard-role">Rôle : {{ role|upper }}</p>
             </div>
 
             <nav class="dashboard-menu" aria-label="Navigation du tableau de bord">
@@ -23,7 +23,7 @@
                     </a>
 
                     <a href="/dashboard/etudiants" class="dashboard-menu-link {{ sidebar_active|default('') == 'students' ? 'active' : '' }}">
-                        <span class="dashboard-menu-link-label">Gestion des �tudiants</span>
+                        <span class="dashboard-menu-link-label">Gestion des étudiants</span>
                     </a>
                 {% endif %}
 
@@ -37,7 +37,7 @@
                     </a>
 
                     <a href="/dashboard/skills" class="dashboard-menu-link {{ sidebar_active|default('') == 'skills' ? 'active' : '' }}">
-                        <span class="dashboard-menu-link-label">Gestion des comp�tences</span>
+                        <span class="dashboard-menu-link-label">Gestion des compétences</span>
                     </a>
                 {% endif %}
 

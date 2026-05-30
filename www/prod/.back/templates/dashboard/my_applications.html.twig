@@ -13,15 +13,15 @@
         <div>
             {% if is_student %}
                 <h1>Mes candidatures</h1>
-                <p>Suivi en temps r�el de vos demandes de stage.</p>
+                <p>Suivi en temps réel de vos demandes de stage.</p>
             {% else %}
                 <h1>
                     Candidatures de
-                    {{ student.first_name|default('�tudiant') }}
+                    {{ student.first_name|default('étudiant') }}
                     {{ student.last_name|default('') }}
                 </h1>
                 <p>
-                    Administration ? �tudiant
+                    Administration → Étudiant
                     <span class="text-xs text-muted" style="font-family: monospace;">
                         #{{ student.id|default(student.id_user|default('N/A')) }}
                     </span>
@@ -35,7 +35,7 @@
         <p>
             Il y a actuellement
             <strong>{{ applications|length }} candidature{{ applications|length > 1 ? 's' : '' }}</strong>
-            enregistr�e{{ applications|length > 1 ? 's' : '' }}.
+            enregistrée{{ applications|length > 1 ? 's' : '' }}.
         </p>
     </div>
 
@@ -43,7 +43,7 @@
         <table class="table">
             <thead>
             <tr>
-                <th>Offre concern�e</th>
+                <th>Offre concernée</th>
                 <th>Entreprise</th>
                 <th>Date</th>
                 <th>ID candidature</th>
@@ -62,13 +62,13 @@
                 {% set offerTitle = app.title_internship_offer
                     |default(app.offer_title
                     |default(app.title
-                        |default(offerId ? 'Offre #' ~ offerId : 'Offre non renseign�e')))
+                        |default(offerId ? 'Offre #' ~ offerId : 'Offre non renseignée')))
                 %}
 
                 {% set companyName = app.company_name
                     |default(app.name_company
                     |default(app.company
-                        |default('Entreprise non renseign�e')))
+                        |default('Entreprise non renseignée')))
                 %}
 
                 {% set appliedAt = app.applied_at_application
@@ -85,8 +85,8 @@
                 {# --- Mapping des statuts --- #}
                 {% set status_map = {
                     'pending':  {'label': 'En attente', 'color': 'var(--warning-color, #f1c40f)'},
-                    'accepted': {'label': 'Accept�e',   'color': 'var(--success-color, #2ecc71)'},
-                    'rejected': {'label': 'Refus�e',    'color': 'var(--error-color, #e74c3c)'}
+                    'accepted': {'label': 'Acceptée',   'color': 'var(--success-color, #2ecc71)'},
+                    'rejected': {'label': 'Refusée',    'color': 'var(--error-color, #e74c3c)'}
                 } %}
 
                 {% set current = status_map[rawStatus]|default({
@@ -144,7 +144,7 @@
             {% else %}
                 <tr>
                     <td colspan="5" class="text-center p-4 text-muted">
-                        Aucune candidature trouv�e.
+                        Aucune candidature trouvée.
                     </td>
                 </tr>
             {% endfor %}
@@ -155,7 +155,7 @@
     {% if totalPages is defined and totalPages > 1 %}
         <div class="pagination" style="display: flex; justify-content: center; gap: 15px; margin-top: 3rem; align-items: center;">
             {% if page > 1 %}
-                <a href="?page={{ page - 1 }}" class="btn btn-ghost">? Pr�c�dent</a>
+                <a href="?page={{ page - 1 }}" class="btn btn-ghost">‹ Précédent</a>
             {% endif %}
 
             <span class="text-sm">

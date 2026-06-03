@@ -298,14 +298,14 @@ docker exec -i lamp-db mysql --default-character-set=utf8mb4 -u website-local -p
 
 | Action | Anonyme | Étudiant | Pilote | Admin |
 |---|:---:|:---:|:---:|:---:|
-| Voir les offres | ? | ? | ? | ? |
-| Voir les entreprises | ? | ? | ? | ? |
-| Se connecter / déconnecter | ? | ? | ? | ? |
-| Postuler à une offre | ? | ? | ? | ? |
-| Gérer sa wish-list | ? | ? | ? | ? |
-| Gérer les offres | ? | ? | ? | ? |
-| Gérer les entreprises | ? | ? | ? | ? |
-| Gérer les comptes | ? | ? | ? | ? |
+| Voir les offres | ✅ | ✅ | ✅ | ✅ |
+| Voir les entreprises | ❌ | ✅ | ✅ | ✅ |
+| Se connecter / déconnecter | ✅ | ✅ | ✅ | ✅ |
+| Postuler à une offre | ❌ | ✅ | ❌ | ❌ |
+| Gérer sa wish-list | ❌ | ✅ | ❌ | ❌ |
+| Gérer les offres | ❌ | ❌ | ✅ | ✅ |
+| Gérer les entreprises | ❌ | ❌ | ✅ | ✅ |
+| Gérer les comptes | ❌ | ❌ | ✅ | ✅ |
 
 ## ✅ État d'avancement
 

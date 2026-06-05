@@ -385,7 +385,10 @@ INSERT INTO business_review (
       (27,12, 4, 'Missions techniques bien cadrées.',                                   '2026-03-22 09:00:00'),
       (28,13, 4, 'Entreprise réactive et dynamique.',                                   '2026-03-22 10:00:00'),
       (29,14, 5, 'Audit très formateur, bonne qualité documentaire.',                   '2026-03-22 11:00:00'),
-      (30,15, 5, 'Très bon contexte DevOps et observabilité.',                          '2026-03-22 12:00:00');
+      (30,15, 5, 'Très bon contexte DevOps et observabilité.',                          '2026-03-22 12:00:00'),
+      -- Avis posté par des ADMINISTRATEURS (id 1-15) : démontre que les admins peuvent aussi noter
+      (1, 1, 4, 'Vu en tant qu''administrateur : entreprise fiable et conventions à jour.', '2026-03-23 09:00:00'),
+      (3, 2, 5, 'Validation administrative : excellent suivi des stagiaires.',              '2026-03-23 10:00:00');
 
 INSERT INTO wishlist (
     student_id_wishlist,

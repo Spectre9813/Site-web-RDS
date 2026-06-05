@@ -133,6 +133,135 @@
         </form>
     </div>
 
+    {# ===================================================================== #}
+    {# ÉVALUATIONS DE L'ENTREPRISE (admins + pilotes)                         #}
+    {# ===================================================================== #}
+    {% if not isNew %}
+        {% set avg = reviewStats.average|default(0) %}
+        {% set total = reviewStats.count|default(0) %}
+
+        <style>
+            .review-section { margin-top: 2.5rem; }
+            .rating-summary { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+            .rating-summary .score { font-size: 2.2rem; font-weight: 700; color: var(--primary-color); line-height: 1; }
+            .stars-static { letter-spacing: 2px; font-size: 1.2rem; }
+            .stars-static .on { color: #f5a623; }
+            .stars-static .off { color: var(--border-color, #ccc); }
+            /* Interactive star picker (radio + reverse trick) */
+            .star-picker { display: inline-flex; flex-direction: row-reverse; justify-content: flex-end; }
+            .star-picker input { display: none; }
+            .star-picker label { font-size: 1.8rem; color: var(--border-color, #ccc); cursor: pointer; padding: 0 2px; transition: color .15s; }
+            .star-picker input:checked ~ label,
+            .star-picker label:hover,
+            .star-picker label:hover ~ label { color: #f5a623; }
+            .review-item { border-bottom: 1px solid var(--border-color); padding: 1rem 0; }
+            .review-item:last-child { border-bottom: none; }
+            .review-head { display: flex; justify-content: space-between; align-items: center; gap: .5rem; flex-wrap: wrap; }
+            .review-meta { color: var(--text-muted, #888); font-size: .8rem; }
+            .role-pill { font-size: .7rem; text-transform: uppercase; letter-spacing: .5px; padding: 2px 8px; border-radius: 999px; }
+            .role-pill.admin { background: #ede9fe; color: #6d28d9; }
+            .role-pill.pilote { background: #dbeafe; color: #1d4ed8; }
+        </style>
+
+        <div class="card review-section" style="padding: 2.5rem;">
+            <h3 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--primary-color); margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                04. Évaluations
+            </h3>
+
+            {# --- Résumé global --- #}
+            <div class="rating-summary">
+                <span class="score">{{ avg > 0 ? avg : '—' }}</span>
+                <div>
+                    <div class="stars-static">
+                        {% for i in 1..5 %}
+                            <span class="{{ i <= (avg|round) ? 'on' : 'off' }}">★</span>
+                        {% endfor %}
+                    </div>
+                    <div class="review-meta">
+                        {{ total }} évaluation{{ total > 1 ? 's' : '' }} sur 5
+                    </div>
+                </div>
+            </div>
+
+            {# --- Mon évaluation (création / modification) --- #}
+            {% set myRating = myReview ? myReview.rating_business_review : 0 %}
+            {% set myComment = myReview ? myReview.comment_business_review : '' %}
+
+            <form action="/dashboard/companies/{{ id }}/reviews" method="POST" style="margin-bottom: 2rem;">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label style="display:block; margin-bottom:.4rem;">
+                        {{ myReview ? 'Modifier votre note' : 'Votre note' }}
+                    </label>
+                    <div class="star-picker">
+                        {% for i in 5..1 %}
+                            <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}"
+                                   {{ myRating == i ? 'checked' : '' }} required>
+                            <label for="star{{ i }}" title="{{ i }} / 5">★</label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label for="comment">Commentaire (optionnel)</label>
+                    <textarea name="comment" id="comment" rows="3"
+                              placeholder="Votre retour sur cette entreprise...">{{ myComment }}</textarea>
+                </div>
+
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <button type="submit" class="btn btn-primary">
+                        {{ myReview ? '💾 Mettre à jour mon évaluation' : '⭐ Publier mon évaluation' }}
+                    </button>
+                </div>
+            </form>
+
+            {% if myReview %}
+                <form action="/dashboard/companies/{{ id }}/reviews/delete" method="POST"
+                      style="margin-bottom: 2rem;"
+                      onsubmit="return confirm('Supprimer votre évaluation ?');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <button type="submit" class="btn btn-ghost btn-sm">🗑️ Supprimer mon évaluation</button>
+                </form>
+            {% endif %}
+
+            {# --- Toutes les évaluations --- #}
+            <h4 style="margin: 1.5rem 0 0.5rem;">Toutes les évaluations</h4>
+            {% for r in reviews %}
+                <div class="review-item">
+                    <div class="review-head">
+                        <div>
+                            <strong>{{ r.first_name }} {{ r.last_name }}</strong>
+                            <span class="role-pill {{ r.reviewer_role }}">
+                                {{ r.reviewer_role == 'admin' ? 'Administrateur' : (r.reviewer_role == 'pilote' ? 'Pilote' : 'Membre') }}
+                            </span>
+                            <span class="stars-static" style="margin-left:.5rem;">
+                                {% for i in 1..5 %}<span class="{{ i <= r.rating ? 'on' : 'off' }}">★</span>{% endfor %}
+                            </span>
+                        </div>
+                        <span class="review-meta">{{ r.review_date|date('d/m/Y') }}</span>
+                    </div>
+                    {% if r.comment %}
+                        <p style="margin:.5rem 0 0; color: var(--text-color);">{{ r.comment }}</p>
+                    {% endif %}
+
+                    {# L'admin peut supprimer l'avis d'un autre ; chacun le sien (déjà géré au-dessus) #}
+                    {% if role == 'admin' and r.reviewer_id != currentUserId %}
+                        <form action="/dashboard/companies/{{ id }}/reviews/delete" method="POST"
+                              style="margin-top:.5rem;"
+                              onsubmit="return confirm('Supprimer cette évaluation ?');">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                            <input type="hidden" name="reviewer_id" value="{{ r.reviewer_id }}">
+                            <button type="submit" class="btn btn-ghost btn-sm">🗑️ Supprimer (admin)</button>
+                        </form>
+                    {% endif %}
+                </div>
+            {% else %}
+                <p class="text-muted">Aucune évaluation pour le moment. Soyez le premier à noter cette entreprise.</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('companyForm');

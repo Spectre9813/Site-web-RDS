@@ -254,6 +254,14 @@ $router->add(
 
 $router->add('GET', '/api/companies', fn($p, $pdo, $twig) => $compHandler($pdo, $twig)->getCompaniesAjax());
 
+// GET — SFx2 : catalogue public des entreprises (tous, anonyme inclus)
+$router->add('GET', '/entreprises', fn($p, $pdo, $twig) => $compHandler($pdo, $twig)->publicList());
+$router->add(
+    'GET',
+    '/entreprises/' . $idPattern,
+    fn($p, $pdo, $twig) => $compHandler($pdo, $twig)->publicShow((int) $p[0])
+);
+
 // ── Company reviews (notes/avis) — admins AND pilots ──────────────────────────
 $router->add(
     'POST',
@@ -266,6 +274,14 @@ $router->add(
     'POST',
     '/dashboard/companies/' . $idPattern . '/reviews/delete',
     fn($p, $pdo, $twig) => $reviewHandler($pdo, $twig)->delete((int) $p[0]),
+    roles: $staff
+);
+
+// POST — SFx6 : suppression d'une entreprise (Admin + Pilote)
+$router->add(
+    'POST',
+    '/dashboard/companies/' . $idPattern . '/delete',
+    fn($p, $pdo, $twig) => $compHandler($pdo, $twig)->deleteCompany((int) $p[0]),
     roles: $staff
 );
 
@@ -319,6 +335,9 @@ $router->add(
 // ════════════════════════════════════════════════════════════════════════════
 $router->add('GET', '/app/offers', fn($p, $pdo, $twig) => $offerHandler($pdo, $twig)->search());
 $router->add('GET', '/app/offers/search', fn($p, $pdo, $twig) => $offerHandler($pdo, $twig)->search());
+
+// GET — SFx11 : statistiques globales des offres (publique)
+$router->add('GET', '/app/offers/stats', fn($p, $pdo, $twig) => $offerHandler($pdo, $twig)->stats());
 
 $router->add(
     'GET',

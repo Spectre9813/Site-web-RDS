@@ -85,4 +85,20 @@
             </div>
         </form>
     </div>
+
+    {# --- Zone de danger : suppression du pilote --- #}
+    <div class="card" style="margin-top: 1.5rem; border: 1px solid var(--error-color, #e74c3c);">
+        <div class="card-body">
+            <span class="section-label" style="color: var(--error-color, #e74c3c);">Zone de danger</span>
+            <p class="text-muted" style="margin: 0.5rem 0 1rem 0;">
+                La suppression d'un pilote est <strong>définitive</strong> et retire également ses assignations de promotion.
+            </p>
+            <form method="POST"
+                  action="/dashboard/pilotes/{{ id }}/delete"
+                  onsubmit="return confirm('Supprimer définitivement ce pilote ? Cette action est irréversible.');">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <button type="submit" class="btn btn-primary" style="background: var(--error-color, #e74c3c); border-color: var(--error-color, #e74c3c);">Supprimer ce pilote</button>
+            </form>
+        </div>
+    </div>
 {% endblock %}

@@ -299,13 +299,20 @@ docker exec -i lamp-db mysql --default-character-set=utf8mb4 -u website-local -p
 | Action | Anonyme | Étudiant | Pilote | Admin |
 |---|:---:|:---:|:---:|:---:|
 | Voir les offres | ✅ | ✅ | ✅ | ✅ |
+| Consulter les statistiques des offres | ✅ | ✅ | ✅ | ✅ |
 | Voir les entreprises | ✅ | ✅ | ✅ | ✅ |
 | Se connecter / déconnecter | ✅ | ✅ | ✅ | ✅ |
 | Postuler à une offre | ❌ | ✅ | ❌ | ❌ |
+| Suivre ses candidatures | ❌ | ✅ | ❌ | ❌ |
 | Gérer sa wish-list | ❌ | ✅ | ❌ | ❌ |
+| Voir les candidatures de ses élèves | ❌ | ❌ | ✅ | ❌ |
 | Gérer les offres | ❌ | ❌ | ✅ | ✅ |
 | Gérer les entreprises | ❌ | ❌ | ✅ | ✅ |
-| Gérer les comptes | ❌ | ❌ | ✅ | ✅ |
+| Noter une entreprise | ❌ | ❌ | ✅ | ✅ |
+| Gérer les comptes étudiants | ❌ | ❌ | ✅ | ✅ |
+| Gérer les comptes pilotes | ❌ | ❌ | ❌ | ✅ |
+
+> ✅ autorisé — ❌ non autorisé. Matrice conforme au document d'assignation des droits (SFx1 à SFx25) et aux restrictions de rôle définies dans le routeur (`index.php`).
 
 ## ✅ État d'avancement
 
@@ -317,20 +324,21 @@ docker exec -i lamp-db mysql --default-character-set=utf8mb4 -u website-local -p
 - [x] Page d'accueil avec message de bienvenue
 - [x] Suivi des candidatures (étudiant)
 - [x] Wish-list étudiant (ajout / retrait)
+- [x] Notation des entreprises par les administrateurs et les pilotes (note de 1 à 5 + commentaire, moyenne et liste des avis affichées sur la fiche entreprise)
 - [x] Flash messages utilisateurs
 - [x] Routage backend propre
 - [x] Intégration Twig sur les vues principales
-- [X] Gestion complète des entreprises
-- [X] Mentions Légales
 
 ### En cours / à finaliser
 
+- [ ] Gestion complète des entreprises (notation terminée ; création / édition / suppression à finaliser)
 - [ ] Gestion complète des pilotes
 - [ ] Gestion complète des étudiants
 - [ ] Vue complète des candidatures par étudiant
 - [ ] Vue candidatures élèves pour le pilote
 - [ ] Statistiques avancées
 - [ ] Tests unitaires complets
+- [ ] Mentions légales
 - [ ] `robots.txt` et `sitemap.xml`
 
 ## 🏗️ Architecture
@@ -383,6 +391,7 @@ Le projet suit une **architecture MVC stricte**, sans framework backend ni CMS.
 | `PromotionRepository` | Promotions et affectations |
 | `SkillRepository` | Compétences requises par les offres |
 | `WishlistRepository` | Gestion de la wish-list étudiante |
+| `ReviewRepository` | Évaluations des entreprises (note + commentaire) par les admins et pilotes |
 
 ### Logique de recherche dynamique
 

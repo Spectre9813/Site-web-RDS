@@ -1,0 +1,31 @@
+{% extends "base.html.twig" %}
+{% block title %}{{ company.name }} — StageFlow{% endblock %}
+
+{% block content %}
+<div class="container">
+    <a href="/entreprises" class="btn btn-ghost btn-sm">← Toutes les entreprises</a>
+
+    <h1>{{ company.name }}</h1>
+
+    {% if company.description %}
+        <p>{{ company.description }}</p>
+    {% endif %}
+
+    <ul class="company-meta">
+        {% if company.location %}
+            <li><strong>Localisation :</strong> {{ company.location }}</li>
+        {% endif %}
+        {% if company.website %}
+            <li><strong>Site web :</strong>
+                <a href="{{ company.website }}" target="_blank" rel="noopener">{{ company.website }}</a>
+            </li>
+        {% endif %}
+    </ul>
+
+    <p>
+        <strong>Note moyenne :</strong>
+        {{ reviewStats.average|default(0) }} / 5
+        ({{ reviewStats.count|default(0) }} avis)
+    </p>
+</div>
+{% endblock %}

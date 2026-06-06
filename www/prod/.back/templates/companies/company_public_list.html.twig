@@ -1,0 +1,25 @@
+{% extends "base.html.twig" %}
+{% block title %}Entreprises partenaires — StageFlow{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Entreprises partenaires</h1>
+
+    <form method="GET" action="/entreprises" class="search-bar">
+        <input type="text" name="name" value="{{ filters.name }}" placeholder="Rechercher une entreprise…">
+        <button type="submit" class="btn btn-primary">🔍 Rechercher</button>
+        <a href="/entreprises" class="btn btn-ghost">Réinitialiser</a>
+    </form>
+
+    <div class="card-grid">
+        {% for company in companies %}
+            <a href="/entreprises/{{ company.id }}" class="card">
+                <strong>{{ company.name }}</strong>
+                <div class="text-sm text-muted">{{ company.sector_name|default('Général') }}</div>
+            </a>
+        {% else %}
+            <p class="text-muted">Aucune entreprise à afficher pour le moment.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -119,6 +119,68 @@ class OfferController extends BaseController
         ]);
     }
 
+    /**
+     * SFx11 — Statistiques globales des offres (accessible à tous).
+     */
+    public function stats(): void
+    {
+        $totalOffers = $this->offerRepository->countAll();
+
+        // Moyenne de candidatures par offre
+        $avg = 0.0;
+        try {
+            $totalApplications = (int) $this->pdo
+                ->query("SELECT COUNT(*) FROM application")
+                ->fetchColumn();
+            $avg = $totalOffers > 0 ? $totalApplications / $totalOffers : 0.0;
+        } catch (\Throwable $e) {
+            $avg = 0.0;
+        }
+
+        // Répartition par durée (en semaines)
+        $durationBreakdown = [];
+        try {
+            $rows = $this->pdo->query(
+                "SELECT duration_weeks_internship_offer AS weeks, COUNT(*) AS nb
+                 FROM internship_offer
+                 WHERE duration_weeks_internship_offer IS NOT NULL
+                 GROUP BY duration_weeks_internship_offer
+                 ORDER BY duration_weeks_internship_offer"
+            )->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($rows as $row) {
+                $durationBreakdown[] = [
+                    'label' => $row['weeks'] . ' semaines',
+                    'value' => (int) $row['nb'],
+                ];
+            }
+        } catch (\Throwable $e) {
+            $durationBreakdown = [];
+        }
+
+        // Top 5 des offres les plus ajoutées en wish-list
+        $topWishlist = [];
+        try {
+            $topWishlist = $this->pdo->query(
+                "SELECT o.title_internship_offer AS label, COUNT(*) AS value
+                 FROM wishlist w
+                 JOIN internship_offer o ON o.id_internship_offer = w.offer_id_wishlist
+                 GROUP BY o.id_internship_offer, o.title_internship_offer
+                 ORDER BY value DESC
+                 LIMIT 5"
+            )->fetchAll(PDO::FETCH_ASSOC) ?: [];
+        } catch (\Throwable $e) {
+            $topWishlist = [];
+        }
+
+        echo $this->twig->render('offers/stats.html.twig', [
+            'total_offers'         => $totalOffers,
+            'average_applications' => $avg,
+            'duration_breakdown'   => $durationBreakdown,
+            'top_wishlist'         => $topWishlist,
+        ]);
+    }
+
     public function searchJson(): void
     {
         $filters = [

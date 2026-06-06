@@ -167,7 +167,10 @@ CREATE TABLE application (
     FOREIGN KEY (offer_id_application) REFERENCES internship_offer(id_internship_offer) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- Pilot reviewing a Company
+-- Staff member (admin OR pilot) reviewing a Company.
+-- NOTE: the column is named pilot_id_business_review for historical reasons,
+-- but it now references user(id_user), so BOTH administrators and pilots can
+-- post a review. Treat it semantically as "reviewer id".
 CREATE TABLE business_review (
     pilot_id_business_review INT NOT NULL,
     company_id_business_review INT NOT NULL,
@@ -175,7 +178,8 @@ CREATE TABLE business_review (
     comment_business_review TEXT,
     reviewed_at_business_review DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (pilot_id_business_review, company_id_business_review),
-    FOREIGN KEY (pilot_id_business_review) REFERENCES pilot(id_pilot) ON DELETE CASCADE,
+    CONSTRAINT fk_business_review_reviewer
+        FOREIGN KEY (pilot_id_business_review) REFERENCES user(id_user) ON DELETE CASCADE,
     FOREIGN KEY (company_id_business_review) REFERENCES company(id_company) ON DELETE CASCADE
 ) ENGINE=InnoDB; 
 

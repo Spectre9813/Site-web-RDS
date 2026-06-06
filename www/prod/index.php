@@ -12,6 +12,7 @@ use App\Controllers\DashboardController;
 use App\Controllers\OfferController;
 use App\Controllers\PilotController;
 use App\Controllers\PromotionController;
+use App\Controllers\ReviewController;
 use App\Controllers\SiteController;
 use App\Controllers\SkillController;
 use App\Controllers\StudentController;
@@ -26,6 +27,7 @@ use App\Repository\CompanyRepository;
 use App\Repository\CompanySiteRepository;
 use App\Repository\OfferRepository;
 use App\Repository\PromotionRepository;
+use App\Repository\ReviewRepository;
 use App\Repository\SkillRepository;
 use App\Repository\UserRepository;
 use App\Repository\WishListRepository;
@@ -103,7 +105,8 @@ $idPattern = '([a-fA-F0-9]{32}|[0-9]+)';
 $authHandler = fn($pdo, $twig) => new AuthController(new UserRepository($pdo), $twig, $pdo);
 $cvHandler = fn($pdo, $twig) => new CVFast(new UserRepository($pdo), $twig, $pdo);
 $dashHandler = fn($pdo, $twig) => new DashboardController($twig);
-$compHandler = fn($pdo, $twig) => new CompanyController(new CompanyRepository($pdo), $twig);
+$compHandler = fn($pdo, $twig) => new CompanyController(new CompanyRepository($pdo), $twig, new ReviewRepository($pdo));
+$reviewHandler = fn($pdo, $twig) => new ReviewController(new ReviewRepository($pdo), $twig);
 $offerHandler = fn($pdo, $twig) => new OfferController($twig, new OfferRepository($pdo), $pdo);
 $siteHandler = fn($pdo, $twig) => new SiteController(new CompanySiteRepository($pdo), new CompanyRepository($pdo), $twig);
 $skillHandler = fn($pdo, $twig) => new SkillController(new SkillRepository($pdo), $twig);
@@ -250,6 +253,21 @@ $router->add(
 );
 
 $router->add('GET', '/api/companies', fn($p, $pdo, $twig) => $compHandler($pdo, $twig)->getCompaniesAjax());
+
+// ── Company reviews (notes/avis) — admins AND pilots ──────────────────────────
+$router->add(
+    'POST',
+    '/dashboard/companies/' . $idPattern . '/reviews',
+    fn($p, $pdo, $twig) => $reviewHandler($pdo, $twig)->store((int) $p[0]),
+    roles: $staff
+);
+
+$router->add(
+    'POST',
+    '/dashboard/companies/' . $idPattern . '/reviews/delete',
+    fn($p, $pdo, $twig) => $reviewHandler($pdo, $twig)->delete((int) $p[0]),
+    roles: $staff
+);
 
 $router->add(
     'GET',

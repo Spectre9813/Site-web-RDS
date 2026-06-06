@@ -6,6 +6,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\CompanyModel;
 use App\Repository\CompanyRepository;
+use App\Repository\ReviewRepository;
 use App\Util;
 use Exception;
 use Twig\Environment;
@@ -14,7 +15,8 @@ class CompanyController extends BaseController
 {
     public function __construct(
         private CompanyRepository $repo,
-        Environment $twig
+        Environment $twig,
+        private ?ReviewRepository $reviewRepo = null
     ) {
         parent::__construct($twig);
     }
@@ -90,6 +92,20 @@ class CompanyController extends BaseController
         $company = $isNew ? null : $this->repo->getById((int) $id);
         $sectors = $this->repo->findAllSectors();
 
+        // --- Reviews (notes/avis) data, only relevant for existing companies ---
+        $reviews   = [];
+        $reviewStats = ['count' => 0, 'average' => 0.0];
+        $myReview  = null;
+        $currentUserId = Util::getUserId() !== null ? (int) Util::getUserId() : null;
+
+        if (!$isNew && $this->reviewRepo !== null) {
+            $reviews     = $this->reviewRepo->findByCompanyDetailed((int) $id);
+            $reviewStats = $this->reviewRepo->getStatsForCompany((int) $id);
+            if ($currentUserId !== null) {
+                $myReview = $this->reviewRepo->findOne($currentUserId, (int) $id);
+            }
+        }
+
         echo $this->twig->render('companies/company_form.html.twig', [
             'id'         => $id,
             'company'    => $company,
@@ -98,7 +114,12 @@ class CompanyController extends BaseController
             'error'      => $_SESSION['flash_error'] ?? null,
             'success'    => $_GET['success'] ?? null,
             'sidebar_active' => 'companies',
-            'role' => Util::getRole()->value
+            'role' => Util::getRole()->value,
+            // Review data
+            'reviews'        => $reviews,
+            'reviewStats'    => $reviewStats,
+            'myReview'       => $myReview,
+            'currentUserId'  => $currentUserId,
         ]);
 
         unset($_SESSION['flash_error']);

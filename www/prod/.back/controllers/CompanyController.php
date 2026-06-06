@@ -176,10 +176,54 @@ class CompanyController extends BaseController
     }
 
     /**
+     * SFx2 — Catalogue public des entreprises (lecture seule, tous rôles).
+     */
+    public function publicList(): void
+    {
+        $filters = [
+            'name'              => $_GET['name'] ?? null,
+            'page'              => (int) ($_GET['page'] ?? 1),
+            'limit'             => 12,
+            'name_company'      => $_GET['name'] ?? null,
+            'is_active_company' => 1, // on n'expose publiquement que les entreprises actives
+        ];
+
+        echo $this->twig->render('companies/company_public_list.html.twig', [
+            'companies' => $this->repo->search($filters),
+            'filters'   => $filters,
+        ]);
+    }
+
+    /**
+     * SFx2 — Fiche publique d'une entreprise (lecture seule).
+     */
+    public function publicShow(int $id): void
+    {
+        $company = $this->repo->getById($id);
+        if (!$company) {
+            $this->abort(404, "Entreprise introuvable.");
+        }
+
+        $reviewStats = $this->reviewRepo?->getStatsForCompany($id)
+            ?? ['count' => 0, 'average' => 0.0];
+
+        echo $this->twig->render('companies/company_public_show.html.twig', [
+            'company'     => $company,
+            'reviewStats' => $reviewStats,
+        ]);
+    }
+
+    /**
      * Deletes a company and its associated sites
      */
     public function deleteCompany(int $id): void
     {
+        // SFx6 — protection CSRF (cohérent avec les formulaires existants)
+        $token = $_POST['csrf_token'] ?? '';
+        if (!Util::validateCSRFToken($token)) {
+            $this->abort(403, "Requête invalide (CSRF Token mismatch).");
+        }
+
         try {
             $companyId = (int) $id;
             $this->repo->deleteSitesByCompany($companyId);

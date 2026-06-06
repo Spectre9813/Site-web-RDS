@@ -38,6 +38,8 @@ class StudentController extends BaseController
         echo $this->twig->render('students/student_list.html.twig', [
             'students' => $students,
             'filters' => $filters,
+            'csrf_token' => Util::getCSRFToken(),
+            'deleted' => $_GET['deleted'] ?? null,
             'sidebar_active' => 'students'
         ]);
     }
@@ -115,6 +117,30 @@ class StudentController extends BaseController
         } catch (Exception $e) {
             $_SESSION['flash_error'] = $e->getMessage();
             header("Location: " . $_SERVER['REQUEST_URI']);
+            exit;
+        }
+    }
+
+    /**
+     * SFx19 — Suppression d'un compte étudiant.
+     * (La protection CSRF est assurée en amont par le Router.)
+     */
+    public function handleDelete(string $id): void
+    {
+        $this->abortIfNotPriv();
+
+        $student = $this->repo->findById($id);
+        if (!$student) {
+            $this->abort(404, "Étudiant introuvable.");
+        }
+
+        try {
+            $this->repo->delete($id);
+            header("Location: /dashboard/etudiants?deleted=1");
+            exit;
+        } catch (Exception $e) {
+            $_SESSION['flash_error'] = $e->getMessage();
+            header("Location: /dashboard/etudiants");
             exit;
         }
     }

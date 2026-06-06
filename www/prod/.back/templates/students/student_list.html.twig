@@ -23,13 +23,21 @@
             <label>Statut recherche</label>
             <select name="status">
                 <option value="">Tous les statuts</option>
-                <option value="Searching" {{ filters.status == 'Searching' ? 'selected' : '' }}>🔍 En recherche</option>
-                <option value="Hired" {{ filters.status == 'Hired' ? 'selected' : '' }}>✅ En poste</option>
+                <option value="searching" {{ filters.status == 'searching' ? 'selected' : '' }}>🔍 En recherche</option>
+                <option value="hired" {{ filters.status == 'hired' ? 'selected' : '' }}>✅ En poste</option>
+                <option value="inactive" {{ filters.status == 'inactive' ? 'selected' : '' }}>⏸️ Inactif</option>
             </select>
         </div>
         <button type="submit" class="btn btn-primary">🔍 Filtrer</button>
         <a href="/dashboard/etudiants" class="btn btn-ghost">Réinitialiser</a>
     </form>
+
+    {% if deleted %}
+        <div class="notice notice-success">
+            <div class="notice-icon">✅</div>
+            <p>L'étudiant a bien été supprimé.</p>
+        </div>
+    {% endif %}
 
     {# --- Notice : Dynamique avec le nombre d'étudiants --- #}
     <div class="notice notice-info">
@@ -58,12 +66,25 @@
                             <span class="text-sm">{{ s.promo_label|default('N/A') }}</span>
                         </td>
                         <td>
-                            <span class="badge {{ s.status == 'Searching' ? 'badge-warning' : 'badge-success' }}">
-                                {{ s.status == 'Searching' ? 'En recherche' : 'En poste' }}
-                            </span>
+                            {% set st = s.status|default('')|lower %}
+                            {% if st == 'hired' %}
+                                <span class="badge badge-success">En poste</span>
+                            {% elseif st == 'inactive' %}
+                                <span class="badge">Inactif</span>
+                            {% else %}
+                                <span class="badge badge-warning">En recherche</span>
+                            {% endif %}
                         </td>
                         <td class="text-right">
+                            <a href="/dashboard/applications/{{ s.id }}" class="btn btn-ghost btn-sm">Candidatures</a>
                             <a href="/dashboard/etudiants/{{ s.id }}" class="btn btn-ghost btn-sm">Gérer</a>
+                            <form method="POST"
+                                  action="/dashboard/etudiants/{{ s.id }}/delete"
+                                  style="display:inline"
+                                  onsubmit="return confirm('Supprimer définitivement {{ s.first_name }} {{ s.last_name }} ? Cette action est irréversible.');">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                <button type="submit" class="btn btn-ghost btn-sm" style="color: var(--error-color, #e74c3c);">Supprimer</button>
+                            </form>
                         </td>
                     </tr>
                 {% else %}

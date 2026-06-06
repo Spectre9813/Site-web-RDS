@@ -41,6 +41,12 @@
                     </a>
                 {% endif %}
 
+                {% if role == 'pilote' %}
+                    <a href="/dashboard/pilote/candidatures" class="dashboard-menu-link {{ sidebar_active|default('') == 'pilot_applications' ? 'active' : '' }}">
+                        <span class="dashboard-menu-link-label">Candidatures de mes étudiants</span>
+                    </a>
+                {% endif %}
+
                 {% if role == 'student' %}
                     <a href="/dashboard/applications" class="dashboard-menu-link {{ sidebar_active|default('') == 'applications' ? 'active' : '' }}">
                         <span class="dashboard-menu-link-label">Mes candidatures</span>

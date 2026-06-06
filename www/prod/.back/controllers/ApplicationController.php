@@ -30,20 +30,41 @@ class ApplicationController extends BaseController
      */
     public function viewStudentApplications(string $id): void
     {
+        // Sécurité : réservé au staff (Admin / Pilote)
+        $this->abortIfNotPriv();
+
         $student = $this->userRepository->findById($id);
+
+        // L'utilisateur ciblé doit exister ET être un étudiant
+        if ($student === null || $student->role !== RoleEnum::Student) {
+            $this->abort(404, "Étudiant introuvable.");
+        }
+
         $currentUser = Util::getUser();
-
-        // Sécurité : Vérifier que l'utilisateur est bien un étudiant
-        assert($student->role === RoleEnum::Student);
-
-        $applications = $this->repo->findByStudent($student->id);
+        $applications = $this->repo->findByStudentDetailed($student->id);
 
         echo $this->twig->render("dashboard/my_applications.html.twig", [
             "user" => $currentUser,
             "student" => $student,
             "applications" => $applications,
-            "sidebar_active" => "applications",
+            "sidebar_active" => "students",
             "is_student" => false
+        ]);
+    }
+
+    /**
+     * GET /dashboard/pilote/candidatures
+     * SFx22 — Liste des candidatures des étudiants de la promotion du pilote.
+     */
+    public function pilotApplications(): void
+    {
+        $pilotId = Util::getUserId();
+        $applications = $this->repo->findByPilot($pilotId);
+
+        echo $this->twig->render("dashboard/pilot_applications.html.twig", [
+            "user" => Util::getUser(),
+            "applications" => $applications,
+            "sidebar_active" => "pilot_applications",
         ]);
     }
 

@@ -168,6 +168,86 @@ class ApplicationRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Liste détaillée des candidatures d'un étudiant (offre + entreprise jointes).
+     * Utilisée par la vue Admin/Pilote des candidatures d'un étudiant (SFx21 staff).
+     */
+    public function findByStudentDetailed(int|string $studentId): array
+    {
+        $sql = "SELECT
+                    a.id_application,
+                    a.id_application              AS id,
+                    a.student_id_application,
+                    a.offer_id_application,
+                    a.status_application,
+                    a.applied_at_application,
+                    o.id_internship_offer,
+                    o.title_internship_offer,
+                    c.name_company
+                FROM application a
+                INNER JOIN internship_offer o
+                    ON a.offer_id_application = o.id_internship_offer
+                INNER JOIN company_site cs
+                    ON o.company_site_id_internship_offer = cs.id_company_site
+                INNER JOIN company c
+                    ON cs.company_id_company_site = c.id_company
+                WHERE a.student_id_application = :student_id
+                ORDER BY a.applied_at_application DESC";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':student_id', (int) $studentId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * SFx22 — Toutes les candidatures des étudiants rattachés à la dernière
+     * promotion assignée au pilote, avec l'identité de l'étudiant.
+     */
+    public function findByPilot(int|string $pilotId): array
+    {
+        $sql = "SELECT
+                    a.id_application,
+                    a.id_application              AS id,
+                    a.status_application,
+                    a.applied_at_application,
+                    o.id_internship_offer,
+                    o.title_internship_offer,
+                    c.name_company,
+                    u.id_user                     AS student_id,
+                    u.first_name_user             AS student_first_name,
+                    u.last_name_user              AS student_last_name,
+                    u.email_user                  AS student_email
+                FROM application a
+                INNER JOIN internship_offer o
+                    ON a.offer_id_application = o.id_internship_offer
+                INNER JOIN company_site cs
+                    ON o.company_site_id_internship_offer = cs.id_company_site
+                INNER JOIN company c
+                    ON cs.company_id_company_site = c.id_company
+                INNER JOIN user u
+                    ON a.student_id_application = u.id_user
+                INNER JOIN student_enrollment se
+                    ON u.id_user = se.student_id_student_enrollment
+                INNER JOIN promotion_assignment pa
+                    ON se.promotion_id_student_enrollment = pa.promotion_assignment_id
+                WHERE pa.pilot_assignment_id = :pilot_id
+                  AND pa.assigned_at = (
+                      SELECT MAX(pa2.assigned_at)
+                      FROM promotion_assignment pa2
+                      WHERE pa2.pilot_assignment_id = :pilot_id_sub
+                  )
+                ORDER BY a.applied_at_application DESC";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':pilot_id', (int) $pilotId, PDO::PARAM_INT);
+        $stmt->bindValue(':pilot_id_sub', (int) $pilotId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function delete(int|string $id): bool
     {
         $stmt = $this->pdo->prepare("DELETE FROM application WHERE id_application = ?");

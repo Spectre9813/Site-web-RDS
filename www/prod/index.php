@@ -509,6 +509,27 @@ $router->add(
 
 $router->add(
     'GET',
+    '/dashboard/pilotes/new',
+    fn($p, $pdo, $twig) => $pilotHandler($pdo, $twig)->renderCreateForm(),
+    roles: [RoleEnum::Admin->value]
+);
+
+$router->add(
+    'POST',
+    '/dashboard/pilotes/new',
+    fn($p, $pdo, $twig) => $pilotHandler($pdo, $twig)->handleStore(),
+    roles: [RoleEnum::Admin->value]
+);
+
+$router->add(
+    'POST',
+    '/dashboard/pilotes/' . $idPattern . '/delete',
+    fn($p, $pdo, $twig) => $pilotHandler($pdo, $twig)->handleDelete($p[0]),
+    roles: [RoleEnum::Admin->value]
+);
+
+$router->add(
+    'GET',
     '/dashboard/pilotes/' . $idPattern,
     fn($p, $pdo, $twig) => $pilotHandler($pdo, $twig)->renderEditForm($p[0]),
     roles: [RoleEnum::Admin->value]

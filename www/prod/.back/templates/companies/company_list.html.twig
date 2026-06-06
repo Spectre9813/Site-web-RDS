@@ -74,7 +74,16 @@
                                 </span>
                             </td>
                             <td class="text-right">
-                                <a href="/dashboard/companies/{{ company.id }}" class="btn btn-ghost btn-sm">Gérer</a>
+                                <div style="display:flex; gap:0.4rem; justify-content:flex-end; flex-wrap:wrap;">
+                                    <a href="/dashboard/companies/{{ company.id }}" class="btn btn-ghost btn-sm">Gérer</a>
+                                    <form method="POST"
+                                          action="/dashboard/companies/{{ company.id }}/delete"
+                                          style="margin:0;"
+                                          onsubmit="return confirm('Supprimer définitivement {{ company.name }} ? Cette action est irréversible.');">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf }}">
+                                        <button type="submit" class="btn btn-ghost btn-sm" style="color: var(--error-color, #e74c3c);">Supprimer</button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     {% else %}

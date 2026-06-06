@@ -1,0 +1,87 @@
+{% extends "dashboard/layout.html.twig" %}
+
+{% block title %}Candidatures de mes étudiants — StageFlow{% endblock %}
+
+{% block dashboard_content %}
+    <div class="page-header">
+        <div>
+            <h1>Candidatures de mes étudiants</h1>
+            <p>Offres auxquelles les étudiants de votre promotion ont postulé.</p>
+        </div>
+    </div>
+
+    <div class="notice notice-info">
+        <div class="notice-icon">ℹ️</div>
+        <p>
+            <strong>{{ applications|length }} candidature{{ applications|length > 1 ? 's' : '' }}</strong>
+            enregistrée{{ applications|length > 1 ? 's' : '' }} pour votre promotion.
+        </p>
+    </div>
+
+    <div class="card p-0 overflow-hidden">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Étudiant</th>
+                <th>Offre concernée</th>
+                <th>Entreprise</th>
+                <th>Date</th>
+                <th class="text-right">Statut</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for app in applications %}
+                {% set status_map = {
+                    'pending':  {'label': 'En attente', 'color': 'var(--warning-color, #f1c40f)'},
+                    'accepted': {'label': 'Acceptée',   'color': 'var(--success-color, #2ecc71)'},
+                    'rejected': {'label': 'Refusée',    'color': 'var(--error-color, #e74c3c)'}
+                } %}
+                {% set rawStatus = app.status_application|default('pending') %}
+                {% set current = status_map[rawStatus]|default({
+                    'label': rawStatus,
+                    'color': 'var(--text-muted, #6b7280)'
+                }) %}
+
+                <tr>
+                    <td>
+                        <strong>{{ app.student_first_name }} {{ app.student_last_name|upper }}</strong><br>
+                        <span class="text-xs text-muted">{{ app.student_email }}</span>
+                    </td>
+                    <td>
+                        {% if app.id_internship_offer %}
+                            <a href="/app/offers/show/{{ app.id_internship_offer }}"
+                               style="font-weight: bold; color: var(--text-main); text-decoration: none;">
+                                {{ app.title_internship_offer|default('Offre #' ~ app.id_internship_offer) }}
+                            </a>
+                        {% else %}
+                            <span style="font-weight: bold;">{{ app.title_internship_offer|default('Offre non renseignée') }}</span>
+                        {% endif %}
+                    </td>
+                    <td><span class="text-sm">{{ app.name_company|default('Entreprise non renseignée') }}</span></td>
+                    <td>
+                        <span class="text-sm text-muted">
+                            {% if app.applied_at_application %}
+                                {{ app.applied_at_application|date('d/m/Y') }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </span>
+                    </td>
+                    <td class="text-right">
+                        <span class="badge"
+                              style="background: var(--bg-secondary, #f8fafc); border: 1px solid {{ current.color }}; color: var(--text-main, #111827); font-weight: bold;">
+                            {{ current.label|upper }}
+                        </span>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center p-4 text-muted">
+                        Aucune candidature enregistrée pour les étudiants de votre promotion.
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

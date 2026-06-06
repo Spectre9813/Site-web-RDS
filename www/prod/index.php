@@ -446,7 +446,7 @@ $router->add(
 $router->add(
     'GET', 
     '/dashboard/applications/' . $idPattern, 
-    fn($p, $pdo, $twig) => $appHandler($pdo, $twig)->viewStudentApplications($p), 
+    fn($p, $pdo, $twig) => $appHandler($pdo, $twig)->viewStudentApplications($p[0]), 
     roles: $staff
 );
 
@@ -457,16 +457,21 @@ $router->add(
     roles: $student
 );
 
-// API — Update application status - Now includes Admin
+// GET — SFx22 : candidatures des étudiants de la promotion du pilote
+$router->add(
+    'GET',
+    '/dashboard/pilote/candidatures',
+    fn($p, $pdo, $twig) => $appHandler($pdo, $twig)->pilotApplications(),
+    roles: $pilote
+);
+
+// API — Update application status (Admin + Pilote)
 $router->add(
     'PATCH', 
     '/api/applications/' . $idPattern . '/status', 
-    fn($p, $pdo, $twig) => $appHandler($pdo, $twig)->updateStatusAjax($p), 
+    fn($p, $pdo, $twig) => $appHandler($pdo, $twig)->updateStatusAjax($p[0]), 
     roles: $staff
 );
-
-// API — Update application status
-$router->add('PATCH', '/api/applications/' . $idPattern . '/status', fn($p, $pdo, $twig) => $appHandler($pdo, $twig)->updateStatusAjax($p[0]), roles: [RoleEnum::Pilote->value]);
 
 // ════════════════════════════════════════════════════════════════════════════
 // WISHLIST (Student Management)
@@ -537,6 +542,13 @@ $router->add(
     'POST',
     '/dashboard/etudiants/new',
     fn($p, $pdo, $twig) => $authHandler($pdo, $twig)->registerStudent(),
+    roles: $staff
+);
+
+$router->add(
+    'POST',
+    '/dashboard/etudiants/' . $idPattern . '/delete',
+    fn($p, $pdo, $twig) => $studentHandler($pdo, $twig)->handleDelete($p[0]),
     roles: $staff
 );
 

@@ -45,7 +45,7 @@
         <p>Il y a actuellement <strong>{{ students|length }} étudiant{{ students|length > 1 ? 's' : '' }}</strong> correspondant à vos critères.</p>
     </div>
 
-    <div class="card p-0 overflow-hidden" style="margin-top: 1rem;">
+    <div class="card p-0" style="margin-top: 1rem; overflow-x: auto;">
         <table class="table">
             <thead>
                 <tr>
@@ -76,15 +76,17 @@
                             {% endif %}
                         </td>
                         <td class="text-right">
-                            <a href="/dashboard/applications/{{ s.id }}" class="btn btn-ghost btn-sm">Candidatures</a>
-                            <a href="/dashboard/etudiants/{{ s.id }}" class="btn btn-ghost btn-sm">Gérer</a>
-                            <form method="POST"
-                                  action="/dashboard/etudiants/{{ s.id }}/delete"
-                                  style="display:inline"
-                                  onsubmit="return confirm('Supprimer définitivement {{ s.first_name }} {{ s.last_name }} ? Cette action est irréversible.');">
-                                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                                <button type="submit" class="btn btn-ghost btn-sm" style="color: var(--error-color, #e74c3c);">Supprimer</button>
-                            </form>
+                            <div style="display:flex; gap:0.4rem; justify-content:flex-end; flex-wrap:wrap;">
+                                <a href="/dashboard/applications/{{ s.id }}" class="btn btn-ghost btn-sm">Candidatures</a>
+                                <a href="/dashboard/etudiants/{{ s.id }}" class="btn btn-ghost btn-sm">Gérer</a>
+                                <form method="POST"
+                                      action="/dashboard/etudiants/{{ s.id }}/delete"
+                                      style="margin:0;"
+                                      onsubmit="return confirm('Supprimer définitivement {{ s.first_name }} {{ s.last_name }} ? Cette action est irréversible.');">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                    <button type="submit" class="btn btn-ghost btn-sm" style="color: var(--error-color, #e74c3c);">Supprimer</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 {% else %}

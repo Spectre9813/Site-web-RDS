@@ -31,6 +31,14 @@
         <a href="/dashboard/pilotes" class="btn btn-ghost">Réinitialiser</a>
     </form>
 
+    {# --- Notice : Suppression réussie --- #}
+    {% if deleted %}
+        <div class="notice notice-success">
+            <div class="notice-icon">✅</div>
+            <p>Le pilote a bien été supprimé.</p>
+        </div>
+    {% endif %}
+
     {# --- Notice : Style Catalogue --- #}
     <div class="notice notice-info">
         <div class="notice-icon">ℹ️</div>
@@ -59,7 +67,16 @@
                             </span>
                         </td>
                         <td class="text-right">
-                            <a href="/dashboard/pilotes/{{ pilot.id }}" class="btn btn-ghost btn-sm">Gérer</a>
+                            <div style="display:flex; gap:0.4rem; justify-content:flex-end; flex-wrap:wrap;">
+                                <a href="/dashboard/pilotes/{{ pilot.id }}" class="btn btn-ghost btn-sm">Gérer</a>
+                                <form method="POST"
+                                      action="/dashboard/pilotes/{{ pilot.id }}/delete"
+                                      style="margin:0;"
+                                      onsubmit="return confirm('Supprimer définitivement {{ pilot.first_name }} {{ pilot.last_name }} ? Cette action est irréversible.');">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                    <button type="submit" class="btn btn-ghost btn-sm" style="color: var(--error-color, #e74c3c);">Supprimer</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 {% else %}

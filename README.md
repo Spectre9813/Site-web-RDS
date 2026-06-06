@@ -320,17 +320,17 @@ docker exec -i lamp-db mysql --default-character-set=utf8mb4 -u website-local -p
 - [x] Flash messages utilisateurs
 - [x] Routage backend propre
 - [x] Intégration Twig sur les vues principales
+- [X] Gestion complète des entreprises
+- [X] Mentions Légales
 
 ### En cours / à finaliser
 
-- [ ] Gestion complète des entreprises
 - [ ] Gestion complète des pilotes
 - [ ] Gestion complète des étudiants
 - [ ] Vue complète des candidatures par étudiant
 - [ ] Vue candidatures élèves pour le pilote
 - [ ] Statistiques avancées
 - [ ] Tests unitaires complets
-- [ ] Mentions légales
 - [ ] `robots.txt` et `sitemap.xml`
 
 ## 🏗️ Architecture

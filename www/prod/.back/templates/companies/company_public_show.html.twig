@@ -1,29 +1,59 @@
 {% extends "base.html.twig" %}
+
 {% block title %}{{ company.name }} — StageFlow{% endblock %}
 
 {% block body %}
-    <a href="/entreprises" class="btn btn-ghost btn-sm">← Toutes les entreprises</a>
+    {# --- En-tête (même style que la gestion) --- #}
+    <div class="page-header">
+        <div>
+            <h1>{{ company.name }}</h1>
+            <p>Fiche entreprise</p>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <a href="/entreprises" class="btn btn-ghost">← Retour à l'annuaire</a>
+        </div>
+    </div>
 
-    <h1>{{ company.name }}</h1>
+    {% set avg = reviewStats.average|default(0) %}
+    {% set total = reviewStats.count|default(0) %}
 
-    {% if company.description %}
-        <p>{{ company.description }}</p>
-    {% endif %}
+    <div class="card" style="padding: 2.5rem;">
+        <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap; margin-bottom:1.5rem;">
+            <span class="badge {{ company.is_active ? 'badge-success' : 'badge-warning' }}">
+                {{ company.is_active ? 'Partenaire actif' : 'En attente' }}
+            </span>
+            {% if total > 0 %}
+                <span class="text-sm">★ <strong>{{ avg }}</strong> / 5 — {{ total }} avis</span>
+            {% else %}
+                <span class="text-sm text-muted">Aucun avis pour le moment</span>
+            {% endif %}
+        </div>
 
-    <ul class="company-meta">
-        {% if company.location %}
-            <li><strong>Localisation :</strong> {{ company.location }}</li>
+        {% if company.description %}
+            <p style="margin-bottom: 2rem;">{{ company.description }}</p>
         {% endif %}
-        {% if company.website %}
-            <li><strong>Site web :</strong>
-                <a href="{{ company.website }}" target="_blank" rel="noopener">{{ company.website }}</a>
-            </li>
-        {% endif %}
-    </ul>
 
-    <p>
-        <strong>Note moyenne :</strong>
-        {{ reviewStats.average|default(0) }} / 5
-        ({{ reviewStats.count|default(0) }} avis)
-    </p>
+        <div class="table-responsive">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td class="text-sm text-muted" style="width: 200px;">SIREN</td>
+                        <td>{{ company.siren|default('Non communiqué') }}</td>
+                    </tr>
+                    {% if company.email %}
+                        <tr>
+                            <td class="text-sm text-muted">Email</td>
+                            <td>{{ company.email }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if company.phone %}
+                        <tr>
+                            <td class="text-sm text-muted">Téléphone</td>
+                            <td>{{ company.phone }}</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}

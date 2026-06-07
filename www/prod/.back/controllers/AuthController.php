@@ -127,7 +127,7 @@ class AuthController extends BaseController
             echo $this->twig->render('auth/register_student.html.twig', [
                 'current_promo' => $currentPromo,
                 'csrf_token' => Util::getCSRFToken(),
-                'user_role' => Util::getRole(), // Ensure this matches 'admin' or 'pilote'
+                'user_role' => Util::getRole()?->value, // Ensure this matches 'admin' or 'pilote'
                 'error' => null,
                 'success' => null,
                 'old' => [] // <--- CRITICAL: Must be an empty array
@@ -214,7 +214,7 @@ class AuthController extends BaseController
         echo $this->twig->render('auth/register_student.html.twig', [
             'error' => $message,
             'success' => null,
-            'user_role' => Util::getRole(),
+            'user_role' => Util::getRole()?->value,
             'csrf_token' => Util::getCSRFToken(),
             'current_promo' => $this->userRepository->getPromoByPilote(Util::getUserId()),
             'old' => []

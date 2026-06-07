@@ -28,7 +28,7 @@ class AuthController extends BaseController
     public function register(): void
     {
         // 1. Check if the user is even allowed to be here
-        $currentRole = Util::getRole(); // returns 'pilote', 'admin', etc.
+        $currentRole = Util::getRole()?->value; // 'admin' | 'pilote' | 'student' | null
         if ($currentRole !== 'admin' && $currentRole !== 'pilote') {
             $this->abort(403, "Accès refusé. Vous n'avez pas les droits requis.");
         }
@@ -112,7 +112,7 @@ class AuthController extends BaseController
 
     public function registerStudent(): void
     {
-        $currentRole = Util::getRole();
+        $currentRole = Util::getRole()?->value; // 'admin' | 'pilote' | 'student' | null
         $currentUserId = Util::getUserId();
 
         // 1. Authorization: Only Admin and Pilote can access this page

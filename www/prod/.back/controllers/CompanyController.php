@@ -180,16 +180,23 @@ class CompanyController extends BaseController
      */
     public function publicList(): void
     {
+        $sectors = $this->repo->findAllSectors();
+
         $filters = [
-            'name'              => $_GET['name'] ?? null,
-            'page'              => (int) ($_GET['page'] ?? 1),
-            'limit'             => 12,
+            'name'      => $_GET['name'] ?? null,
+            'sector_id' => $_GET['sector_id'] ?? null,
+            'page'      => (int) ($_GET['page'] ?? 1),
+            'limit'     => 12,
+
+            // alias schéma BDD
             'name_company'      => $_GET['name'] ?? null,
+            'sector_id_company' => $_GET['sector_id'] ?? null,
             'is_active_company' => 1, // on n'expose publiquement que les entreprises actives
         ];
 
         echo $this->twig->render('companies/company_public_list.html.twig', [
             'companies' => $this->repo->search($filters),
+            'sectors'   => $sectors,
             'filters'   => $filters,
         ]);
     }

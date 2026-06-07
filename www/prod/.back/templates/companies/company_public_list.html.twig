@@ -1,13 +1,12 @@
 {% extends "base.html.twig" %}
 {% block title %}Entreprises partenaires — StageFlow{% endblock %}
 
-{% block content %}
-<div class="container">
+{% block body %}
     <h1>Entreprises partenaires</h1>
 
     <form method="GET" action="/entreprises" class="search-bar">
         <input type="text" name="name" value="{{ filters.name }}" placeholder="Rechercher une entreprise…">
-        <button type="submit" class="btn btn-primary">🔍 Rechercher</button>
+        <button type="submit" class="btn btn-primary">Rechercher</button>
         <a href="/entreprises" class="btn btn-ghost">Réinitialiser</a>
     </form>
 
@@ -21,5 +20,4 @@
             <p class="text-muted">Aucune entreprise à afficher pour le moment.</p>
         {% endfor %}
     </div>
-</div>
 {% endblock %}

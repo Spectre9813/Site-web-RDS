@@ -1,23 +1,94 @@
 {% extends "base.html.twig" %}
+
 {% block title %}Entreprises partenaires — StageFlow{% endblock %}
 
 {% block body %}
-    <h1>Entreprises partenaires</h1>
+    {# --- En-tête (même style que la gestion) --- #}
+    <div class="page-header">
+        <div>
+            <h1>Entreprises partenaires</h1>
+            <p>Découvrez les organisations qui proposent des stages sur la plateforme.</p>
+        </div>
+    </div>
 
+    {# --- Barre de recherche --- #}
     <form method="GET" action="/entreprises" class="search-bar">
-        <input type="text" name="name" value="{{ filters.name }}" placeholder="Rechercher une entreprise…">
-        <button type="submit" class="btn btn-primary">Rechercher</button>
+        <div class="form-group">
+            <label>Mots-clés</label>
+            <input type="text" name="name" placeholder="Nom de l'entreprise..." value="{{ filters.name|default('') }}">
+        </div>
+        <div class="form-group">
+            <label>Secteur d'activité</label>
+            <select name="sector_id">
+                <option value="">Tous les secteurs</option>
+                {% for sector in sectors %}
+                    <option value="{{ sector.id }}" {{ filters.sector_id|default('') == sector.id ? 'selected' : '' }}>
+                        {{ sector.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">🔍 Filtrer</button>
         <a href="/entreprises" class="btn btn-ghost">Réinitialiser</a>
     </form>
 
-    <div class="card-grid">
-        {% for company in companies %}
-            <a href="/entreprises/{{ company.id }}" class="card">
-                <strong>{{ company.name }}</strong>
-                <div class="text-sm text-muted">{{ company.sector_name|default('Général') }}</div>
-            </a>
-        {% else %}
-            <p class="text-muted">Aucune entreprise à afficher pour le moment.</p>
-        {% endfor %}
+    {# --- Notice --- #}
+    <div class="notice notice-info">
+        <div class="notice-icon">ℹ️</div>
+        <p>Il y a actuellement <strong>{{ companies|length }} entreprise{{ companies|length > 1 ? 's' : '' }}</strong> correspondant à vos critères.</p>
+    </div>
+
+    {# --- Liste (lecture seule) --- #}
+    <div class="card p-0 overflow-hidden" style="margin-top: 1rem;">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Organisation</th>
+                        <th>Secteur</th>
+                        <th class="text-right">Détails</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for company in companies %}
+                        <tr>
+                            <td>
+                                <div class="company-info" style="display: flex; align-items: center; gap: 10px;">
+                                    <div class="company-logo-placeholder" style="font-size: 1.5rem;">🏢</div>
+                                    <div>
+                                        <strong>{{ company.name }}</strong>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-sm">{{ company.sector_name|default('Général') }}</td>
+                            <td class="text-right">
+                                <a href="/entreprises/{{ company.id }}" class="btn btn-ghost btn-sm">Voir la fiche</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="3" class="text-center p-4">
+                                <p class="text-muted">Aucune entreprise trouvée.</p>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {# --- Pagination --- #}
+    {% set page = filters.page|default(1) %}
+    {% set qs = (filters.name ? '&name=' ~ filters.name : '') ~ (filters.sector_id ? '&sector_id=' ~ filters.sector_id : '') %}
+    <div class="pagination" style="display: flex; justify-content: center; gap: 15px; margin-top: 3rem; align-items: center;">
+        {% if page > 1 %}
+            <a href="?page={{ page - 1 }}{{ qs }}" class="btn btn-ghost">← Précédent</a>
+        {% endif %}
+
+        <span class="text-sm">Page <strong>{{ page }}</strong></span>
+
+        {% if companies|length >= 12 %}
+            <a href="?page={{ page + 1 }}{{ qs }}" class="btn btn-ghost">Suivant →</a>
+        {% endif %}
     </div>
 {% endblock %}

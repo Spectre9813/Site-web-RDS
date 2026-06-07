@@ -1,8 +1,7 @@
 {% extends "base.html.twig" %}
 {% block title %}{{ company.name }} — StageFlow{% endblock %}
 
-{% block content %}
-<div class="container">
+{% block body %}
     <a href="/entreprises" class="btn btn-ghost btn-sm">← Toutes les entreprises</a>
 
     <h1>{{ company.name }}</h1>
@@ -27,5 +26,4 @@
         {{ reviewStats.average|default(0) }} / 5
         ({{ reviewStats.count|default(0) }} avis)
     </p>
-</div>
 {% endblock %}

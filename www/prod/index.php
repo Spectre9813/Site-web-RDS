@@ -625,6 +625,20 @@ $router->add(
 
 $router->add(
     'GET',
+    '/dashboard/campus/new',
+    fn($p, $pdo, $twig) => $campusHandler($pdo, $twig)->create(),
+    roles: [RoleEnum::Admin->value]
+);
+
+$router->add(
+    'POST',
+    '/dashboard/campus/new',
+    fn($p, $pdo, $twig) => $campusHandler($pdo, $twig)->create(),
+    roles: [RoleEnum::Admin->value]
+);
+
+$router->add(
+    'GET',
     '/dashboard/campus/edit/' . $idPattern,
     fn($p, $pdo, $twig) => $campusHandler($pdo, $twig)->edit((int) $p[0]),
     roles: [RoleEnum::Admin->value]

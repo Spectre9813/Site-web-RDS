@@ -618,3 +618,100 @@
         transform: none;
     }
 }
+
+/* ===================================================
+   DASHBOARD — Composants manquants
+   (barre de filtres, badges de statut, petits boutons,
+    icône de notice). Utilisés par companies / students /
+    pilots / campus / skills mais absents jusqu'ici.
+   =================================================== */
+
+/* ---------- BARRE DE FILTRES (formulaire) ----------
+   Les templates utilisent <form class="search-bar"> comme
+   barre d'outils horizontale contenant des .form-group et
+   des boutons. On la dispose donc en flex, les enfants
+   restant alignés en bas. */
+form.search-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: clamp(0.75rem, 1.5vw, 1rem);
+}
+
+form.search-bar:hover,
+form.search-bar:focus {
+    border-color: var(--clr-border);
+    box-shadow: none;
+}
+
+form.search-bar .form-group {
+    flex: 1 1 200px;
+    min-width: 160px;
+    margin-bottom: 0;
+}
+
+form.search-bar .btn {
+    flex: 0 0 auto;
+}
+
+@media (max-width: 640px) {
+    form.search-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    form.search-bar .form-group,
+    form.search-bar .btn {
+        flex: 1 1 auto;
+        width: 100%;
+    }
+}
+
+/* ---------- PETITS BOUTONS ---------- */
+.btn-sm {
+    min-height: 34px;
+    min-width: auto;
+    padding: clamp(0.3rem, 1vw, 0.4rem) clamp(0.6rem, 1.5vw, 0.75rem);
+    font-size: clamp(0.7rem, 1.1vw, 0.78rem);
+    gap: 0.3rem;
+}
+
+/* ---------- BADGES DE STATUT ---------- */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 0.25rem 0.55rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    white-space: nowrap;
+    background: var(--clr-tag-slate);
+    color: var(--clr-tag-slate-t);
+}
+
+.badge-success {
+    background: var(--clr-tag-green);
+    color: var(--clr-tag-green-t);
+}
+
+.badge-warning {
+    background: var(--clr-tag-amber);
+    color: var(--clr-tag-amber-t);
+}
+
+.badge-danger {
+    background: color-mix(in srgb, var(--clr-danger) 14%, var(--clr-surface) 86%);
+    color: var(--clr-danger);
+}
+
+/* ---------- ICÔNE DE NOTICE ---------- */
+.notice-icon {
+    flex-shrink: 0;
+    font-size: 1.2rem;
+    line-height: 1.2;
+}

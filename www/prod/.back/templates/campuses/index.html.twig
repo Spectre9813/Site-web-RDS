@@ -67,9 +67,13 @@
                             <td class="text-right">
                                 <div style="display: flex; gap: 5px; justify-content: flex-end;">
                                     <a href="/dashboard/campus/edit/{{ campus.id_campus }}" class="btn btn-ghost btn-sm">Modifier</a>
-                                    <a href="/dashboard/campus/delete/{{ campus.id_campus }}" 
-                                       class="btn btn-danger btn-sm" 
-                                       onclick="return confirm('Voulez-vous vraiment supprimer ce campus ?');">Supprimer</a>
+                                    <form method="POST"
+                                          action="/dashboard/campus/delete/{{ campus.id_campus }}"
+                                          style="margin: 0;"
+                                          onsubmit="return confirm('Voulez-vous vraiment supprimer ce campus ?');">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf }}">
+                                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                                    </form>
                                 </div>
                             </td>
                         {% endif %}

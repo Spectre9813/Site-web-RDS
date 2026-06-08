@@ -6,6 +6,7 @@ namespace App\Controllers;
 use App\Models\CampusModel;
 use App\Models\RoleEnum;
 use App\Repository\CampusRepository;
+use App\Util;
 use Twig\Environment;
 
 class CampusController extends BaseController
@@ -33,6 +34,7 @@ class CampusController extends BaseController
             'campuses' => $campuses,   // array of CampusModel instances
             'filters' => ['keyword' => $_GET['keyword'] ?? ''],
             'isPrivileged' => $this->isPrivileged(), // or however you check privileges
+            'csrf' => Util::getCSRFToken(),
             'sidebar_active' => 'campuses'
         ]);
     }
@@ -113,6 +115,44 @@ class CampusController extends BaseController
         $this->campusRepository->deleteById($id);
     }
 
+    /**
+     * Affiche le formulaire de création (GET) et enregistre un nouveau campus (POST).
+     * Réservé aux utilisateurs privilégiés (Admin ou Pilote).
+     */
+    public function create(): void
+    {
+        $this->abortIfNotPriv();
+
+        $error = null;
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $name    = trim((string) ($_POST['name_campus'] ?? ''));
+            $address = trim((string) ($_POST['address_campus'] ?? ''));
+
+            if ($name === '') {
+                $error = "Le nom du campus est requis.";
+            } else {
+                $campus = CampusModel::fromArray([
+                    // pas d'id_campus -> le repository effectue un INSERT
+                    'name_campus'    => $name,
+                    'address_campus' => $address !== '' ? $address : null,
+                ]);
+
+                if ($this->campusRepository->save($campus)) {
+                    $this->redirect('/dashboard/campus');
+                }
+
+                $error = "L'enregistrement du campus a échoué. Veuillez réessayer.";
+            }
+        }
+
+        echo $this->twig->render('campuses/create.html.twig', [
+            'sidebar_active' => 'campuses',
+            'error'          => $error,
+            'old'            => $_POST ?? [],
+        ]);
+    }
+
     public function edit(int|string $id): void
     {
         $this->abortIfNotPriv();
@@ -139,7 +179,7 @@ class CampusController extends BaseController
         }
 
         echo $this->twig->render('campuses/edit.html.twig', [
-            'sidebar_active' => 'campus',
+            'sidebar_active' => 'campuses',
             'campus' => $campus,
             'error' => $error ?? null,
         ]);
@@ -149,6 +189,12 @@ class CampusController extends BaseController
     public function delete(int|string $id): void
     {
         $this->abortIfNotPriv();
+
+        // Protection CSRF (cohérent avec les formulaires entreprises/étudiants)
+        $token = $_POST['csrf_token'] ?? '';
+        if (!Util::validateCSRFToken($token)) {
+            $this->abort(403, "Requête invalide (CSRF Token mismatch).");
+        }
 
         $campus = $this->campusRepository->getById($id);
         if (!$campus) {

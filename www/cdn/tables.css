@@ -195,3 +195,12 @@ th.sort-desc::after {
     align-items: center;
     justify-content: center;
 }
+/* ---------- CONTENEUR DE TABLE RESPONSIVE ----------
+   Alias utilisé par les templates dashboard (companies,
+   sites...). Permet le défilement horizontal de la table
+   (min-width: 600px) lorsqu'elle est placée dans une .card. */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}

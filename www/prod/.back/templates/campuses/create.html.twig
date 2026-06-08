@@ -1,0 +1,51 @@
+{# .back/views/campus/create.html.twig #}
+{% extends "dashboard/layout.html.twig" %}
+
+{% block title %}Ajouter un Campus — StageFlow{% endblock %}
+
+{% block dashboard_content %}
+    <div class="page-header">
+        <div>
+            <h1>Ajouter un Campus</h1>
+            <p>Créer un nouveau campus et renseigner sa localisation.</p>
+        </div>
+        <div>
+            <a href="/dashboard/campus" class="btn btn-ghost">Retour</a>
+        </div>
+    </div>
+
+    {% if error %}
+        <div class="notice notice-error">
+            <div class="notice-icon">⚠️</div>
+            <p>{{ error }}</p>
+        </div>
+    {% endif %}
+
+    <div class="card" style="padding: 2rem; max-width: 720px;">
+        <form method="POST" action="/dashboard/campus/new">
+            <div class="form-group" style="margin-bottom: 1.25rem;">
+                <label for="name_campus">Nom du campus</label>
+                <input type="text"
+                       id="name_campus"
+                       name="name_campus"
+                       value="{{ old.name_campus|default('') }}"
+                       placeholder="ex: Campus de Paris"
+                       required>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.25rem;">
+                <label for="address_campus">Adresse</label>
+                <input type="text"
+                       id="address_campus"
+                       name="address_campus"
+                       value="{{ old.address_campus|default('') }}"
+                       placeholder="ex: 12 rue de la Paix, 75002 Paris">
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 1.5rem;">
+                <button type="submit" class="btn btn-primary">+ Créer le campus</button>
+                <a href="/dashboard/campus" class="btn btn-ghost">Annuler</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

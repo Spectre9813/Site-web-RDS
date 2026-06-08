@@ -3,20 +3,20 @@
    ========================================================= */
 
 /* 1. Core foundations */
-@import url('https://cdn.stageflow.fr/base.css');
+@import url('https://cdn.stageflow.fr/base.css?v=2');
 
 /* 2. Structural shell */
-@import url('https://cdn.stageflow.fr/layout.css');
+@import url('https://cdn.stageflow.fr/layout.css?v=2');
 
 /* 3. Reusable components */
-@import url('https://cdn.stageflow.fr/components.css');
+@import url('https://cdn.stageflow.fr/components.css?v=2');
 
 /* 4. Forms & tables */
-@import url('https://cdn.stageflow.fr/forms.css');
-@import url('https://cdn.stageflow.fr/tables.css');
+@import url('https://cdn.stageflow.fr/forms.css?v=2');
+@import url('https://cdn.stageflow.fr/tables.css?v=2');
 
 /* 5. Feature-specific UI */
-@import url('https://cdn.stageflow.fr/features.css');
+@import url('https://cdn.stageflow.fr/features.css?v=2');
 
 /*
  * Legal pages intentionally load legals.css separately

@@ -75,6 +75,13 @@ fi
 mkdir -p /var/log/apache2
 chown -R www-data:www-data /var/log/apache2 || true
 
+# Dossiers d'upload pour les candidatures (CV + lettres de motivation).
+# ApplicationController::handleFileUpload() y écrit, ils doivent donc
+# appartenir à www-data (l'utilisateur Apache).
+mkdir -p /var/www/html/cdn/uploads/cv /var/www/html/cdn/uploads/lm
+chown -R www-data:www-data /var/www/html/cdn/uploads
+chmod -R 755 /var/www/html/cdn/uploads
+
 # ------------------------------------------------------------------
 # 4. Start Apache
 # ------------------------------------------------------------------

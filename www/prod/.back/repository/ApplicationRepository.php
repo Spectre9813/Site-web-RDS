@@ -256,6 +256,34 @@ class ApplicationRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Vrai si l'étudiant est inscrit dans la promotion la plus récente
+     * assignée au pilote (même périmètre que findByPilot, SFx22).
+     */
+    public function isStudentManagedByPilot(int|string $pilotId, int|string $studentId): bool
+    {
+        $sql = "SELECT 1
+                FROM student_enrollment se
+                INNER JOIN promotion_assignment pa
+                    ON se.promotion_id_student_enrollment = pa.promotion_assignment_id
+                WHERE pa.pilot_assignment_id = :pilot_id
+                  AND se.student_id_student_enrollment = :student_id
+                  AND pa.assigned_at = (
+                      SELECT MAX(pa2.assigned_at)
+                      FROM promotion_assignment pa2
+                      WHERE pa2.pilot_assignment_id = :pilot_id_sub
+                  )
+                LIMIT 1";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':pilot_id', (int) $pilotId, PDO::PARAM_INT);
+        $stmt->bindValue(':pilot_id_sub', (int) $pilotId, PDO::PARAM_INT);
+        $stmt->bindValue(':student_id', (int) $studentId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return (bool) $stmt->fetchColumn();
+    }
+
     public function delete(int|string $id): bool
     {
         $stmt = $this->pdo->prepare("DELETE FROM application WHERE id_application = ?");

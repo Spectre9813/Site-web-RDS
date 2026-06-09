@@ -40,6 +40,12 @@ class ApplicationController extends BaseController
             $this->abort(404, "Étudiant introuvable.");
         }
 
+        // Périmètre pilote (SFx22) : un pilote ne consulte que les étudiants de
+        // sa promotion. L'admin conserve un accès complet.
+        if ($this->isPilote() && !$this->repo->isStudentManagedByPilot(Util::getUserId(), $student->id)) {
+            $this->abort(403, "Vous ne pouvez consulter que les candidatures des étudiants de votre promotion.");
+        }
+
         $currentUser = Util::getUser();
         $applications = $this->repo->findByStudentDetailed($student->id);
 
@@ -281,6 +287,12 @@ class ApplicationController extends BaseController
         $app = $this->repo->findById($id);
         if (!$app) {
             $this->jsonResponse(['error' => 'Candidature inexistante'], 404);
+        }
+
+        // Périmètre pilote (SFx22) : un pilote ne modifie que les candidatures
+        // des étudiants de sa promotion. L'admin conserve un accès complet.
+        if ($this->isPilote() && !$this->repo->isStudentManagedByPilot(Util::getUserId(), $app->student_id_application)) {
+            $this->jsonResponse(['error' => "Action non autorisée : cet étudiant n'est pas dans votre promotion."], 403);
         }
 
         $app->status_application = $status;

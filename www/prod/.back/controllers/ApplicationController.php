@@ -197,6 +197,16 @@ class ApplicationController extends BaseController
      */
     public function doApply(string $id): void
     {
+        $studentId = Util::getUserId();
+
+        // Empêche les candidatures en double : un étudiant ne peut postuler
+        // qu'une seule fois à une même offre. On vérifie AVANT de traiter
+        // l'upload pour ne pas stocker de CV inutile.
+        if ($this->repo->existsForStudentAndOffer($studentId, $id)) {
+            header("Location: /app/offers/{$id}/apply?error=already_applied");
+            exit;
+        }
+
         // Handle CV upload if present
         $cvPath = $_POST['cv_path'] ?? null;
         if (!empty($_FILES['cv_file']['name'])) {

@@ -202,7 +202,7 @@ class ApplicationController extends BaseController
         error_log('Application data: ' . print_r($application, true));
 
         if ($this->repo->push($application)) {
-            header('Location: /app/offers/my-applications?status=success');
+            header('Location: /dashboard/applications?status=success');
         } else {
             header("Location: /app/offers/{$id}/apply?error=save_failed");
         }

@@ -40,7 +40,8 @@
     </div>
 
     <div class="card p-0 overflow-hidden">
-        <table class="table">
+        <div class="table-responsive">
+            <table class="table">
             <thead>
             <tr>
                 <th>Offre concernée</th>
@@ -149,7 +150,8 @@
                 </tr>
             {% endfor %}
             </tbody>
-        </table>
+            </table>
+        </div>
     </div>
 
     {% if totalPages is defined and totalPages > 1 %}

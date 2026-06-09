@@ -4,27 +4,28 @@
    === FULLY RESPONSIVE DESIGN ===
    =================================================== */
 
+/* ===================================================
+   BASE = MOBILE : chaque ligne s'affiche en carte empilee
+   =================================================== */
+
 .table-wrap {
     width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    border: 1px solid var(--clr-border);
-    margin-bottom: clamp(1.5rem, 4vw, 2rem);
+    margin-bottom: clamp(1rem, 3vw, 1.5rem);
     border-radius: var(--border-radius);
     background: var(--clr-surface);
+    /* ni bordure ni scroll horizontal : inutiles en mode carte */
 }
 
 table {
     width: 100%;
-    min-width: 600px;
     border-collapse: collapse;
     font-size: clamp(0.8rem, 1.5vw, 0.9rem);
     text-align: left;
 }
 
+/* En-tetes masques : repris cellule par cellule via data-label */
 thead {
-    background: var(--clr-accent);
-    color: var(--clr-accent-inv);
+    display: none;
 }
 
 thead th {
@@ -33,21 +34,20 @@ thead th {
     font-size: clamp(0.7rem, 1.2vw, 0.8rem);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-thead th:last-child {
-    border-right: none;
+tbody,
+tbody tr {
+    display: block;
+    width: 100%;
 }
 
 tbody tr {
-    border-bottom: 1px solid var(--clr-border-light);
+    border: 1px solid var(--clr-border);
+    margin-bottom: 1rem;
+    border-radius: var(--border-radius);
+    overflow: hidden;
     transition: background 0.2s ease;
-    min-height: 44px;
-}
-
-tbody tr:last-child {
-    border-bottom: none;
 }
 
 tbody tr:nth-child(even) {
@@ -63,70 +63,96 @@ tbody tr:hover {
 }
 
 tbody td {
-    padding: clamp(0.6rem, 1.5vw, 0.8rem) clamp(0.75rem, 1.5vw, 1rem);
-    vertical-align: middle;
-    border-right: 1px solid var(--clr-border-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: clamp(0.5rem, 1.5vw, 0.75rem);
+    border-bottom: 1px solid var(--clr-border-light);
     color: var(--clr-text);
-    white-space: nowrap;
-}
-
-tbody td.wrap-text {
     white-space: normal;
-    min-width: 200px;
 }
 
 tbody td:last-child {
-    border-right: none;
+    border-bottom: none;
 }
 
-/* Mobile-first responsive tables */
-@media (max-width: 768px) {
+/* Le libelle de colonne ne s'affiche QUE si la cellule porte data-label
+   (sinon la valeur prend toute la largeur, pas de colonne vide) */
+tbody td[data-label]::before {
+    content: attr(data-label);
+    font-weight: 700;
+    flex: 0 0 40%;
+    margin-right: 0.5rem;
+    color: var(--clr-text);
+}
+
+/* ===================================================
+   >= 769px : on retablit le vrai tableau
+   =================================================== */
+@media (min-width: 769px) {
     .table-wrap {
-        margin-bottom: clamp(1rem, 3vw, 1.5rem);
-        border: none;
-    }
-    
-    table {
-        min-width: auto;
-    }
-    
-    thead {
-        display: none;
-    }
-    
-    tbody, 
-    tbody tr {
-        display: block;
-        width: 100%;
-    }
-    
-    tbody tr {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
         border: 1px solid var(--clr-border);
-        margin-bottom: 1rem;
-        border-radius: var(--border-radius);
-        overflow: hidden;
+        margin-bottom: clamp(1.5rem, 4vw, 2rem);
     }
-    
-    tbody td {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: clamp(0.5rem, 1.5vw, 0.75rem);
+
+    table {
+        min-width: 600px;
+    }
+
+    thead {
+        display: table-header-group;
+        background: var(--clr-accent);
+        color: var(--clr-accent-inv);
+    }
+
+    thead th {
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    thead th:last-child {
+        border-right: none;
+    }
+
+    tbody {
+        display: table-row-group;
+    }
+
+    tbody tr {
+        display: table-row;
         border: none;
         border-bottom: 1px solid var(--clr-border-light);
-        white-space: normal;
+        margin-bottom: 0;
+        border-radius: 0;
+        overflow: visible;
+        min-height: 44px;
     }
-    
-    tbody td:last-child {
+
+    tbody tr:last-child {
         border-bottom: none;
     }
-    
-    tbody td::before {
-        content: attr(data-label);
-        font-weight: 700;
-        flex: 0 0 40%;
-        margin-right: 0.5rem;
-        color: var(--clr-text);
+
+    tbody td {
+        display: table-cell;
+        padding: clamp(0.6rem, 1.5vw, 0.8rem) clamp(0.75rem, 1.5vw, 1rem);
+        vertical-align: middle;
+        border-bottom: none;
+        border-right: 1px solid var(--clr-border-light);
+        white-space: nowrap;
+    }
+
+    tbody td.wrap-text {
+        white-space: normal;
+        min-width: 200px;
+    }
+
+    tbody td:last-child {
+        border-right: none;
+    }
+
+    tbody td[data-label]::before {
+        content: none;
     }
 }
 

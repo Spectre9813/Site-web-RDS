@@ -1,7 +1,7 @@
 {% extends "dashboard/layout.html.twig" %}
 
 {% block title %}
-    {{ mode == 'edit' ? 'Modifier' : 'Publier' }} une offre ? StageFlow
+    {{ mode == 'edit' ? 'Modifier' : 'Publier' }} une offre - StageFlow
 {% endblock %}
 
 {% block dashboard_content %}
@@ -93,7 +93,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="hourly_rate">Gratification (?/h)</label>
+                        <label for="hourly_rate">Gratification (€/h)</label>
                         <input
                                 type="number"
                                 step="0.01"

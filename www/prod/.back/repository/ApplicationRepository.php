@@ -100,24 +100,32 @@ class ApplicationRepository
     public function findByStudent(int|string $studentId): array
     {
         $sql = "SELECT
-                    id_application,
-                    student_id_application,
-                    offer_id_application,
-                    cv_path_application,
-                    cover_letter_path_application,
-                    status_application,
-                    applied_at_application
-                FROM application
-                WHERE student_id_application = ?
-                ORDER BY applied_at_application DESC";
+                    a.id_application,
+                    a.id_application              AS id,
+                    a.student_id_application,
+                    a.offer_id_application,
+                    a.cv_path_application,
+                    a.cover_letter_path_application,
+                    a.status_application,
+                    a.applied_at_application,
+                    o.id_internship_offer,
+                    o.title_internship_offer,
+                    c.name_company
+                FROM application a
+                INNER JOIN internship_offer o
+                    ON a.offer_id_application = o.id_internship_offer
+                INNER JOIN company_site cs
+                    ON o.company_site_id_internship_offer = cs.id_company_site
+                INNER JOIN company c
+                    ON cs.company_id_company_site = c.id_company
+                WHERE a.student_id_application = :student_id
+                ORDER BY a.applied_at_application DESC";
 
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([(int) $studentId]);
+        $stmt->bindValue(':student_id', (int) $studentId, PDO::PARAM_INT);
+        $stmt->execute();
 
-        return array_map(
-            fn(array $row) => ApplicationModel::fromArray($row),
-            $stmt->fetchAll(PDO::FETCH_ASSOC)
-        );
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getStudentProgress(int $studentId): array

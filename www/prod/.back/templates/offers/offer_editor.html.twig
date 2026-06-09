@@ -14,7 +14,7 @@
 
     {% if error %}
         <div class="notice notice-error">
-            <div class="notice-icon">??</div>
+            <div class="notice-icon">⚠️</div>
             <p><strong>Erreur :</strong> {{ error }}</p>
         </div>
     {% endif %}
@@ -46,7 +46,7 @@
                     <div class="form-group">
                         <label for="company_id">Entreprise</label>
                         <select name="company_id" id="company_id" required>
-                            <option value="">? Choisir une entreprise ?</option>
+                            <option value="">– Choisir une entreprise</option>
                             {% for company in companies %}
                                 <option
                                         value="{{ company.id }}"
@@ -68,7 +68,7 @@
                         <label for="site_id">Site d'affectation</label>
                         <select name="site_id" id="site_id" required {{ mode != 'edit' ? 'disabled' : '' }}>
                             {% if mode == 'edit' and sites is not empty %}
-                                <option value="">? Choisir un site ?</option>
+                                <option value="">– Choisir un site</option>
                                 {% for site in sites %}
                                     <option
                                             value="{{ site.id_company_site }}"
@@ -87,7 +87,7 @@
                                     </option>
                                 {% endfor %}
                             {% else %}
-                                <option value="">– Sélectionnez d'abord une entreprise ?</option>
+                                <option value="">– Sélectionnez d'abord une entreprise</option>
                             {% endif %}
                         </select>
                     </div>
@@ -336,7 +336,7 @@
             const siteSelect = document.getElementById('site_id');
 
             async function loadCompanies() {
-                companySelect.innerHTML = '<option value="">? Chargement des entreprises... ?</option>';
+                companySelect.innerHTML = '<option value="">⏳ Chargement des entreprises…</option>';
 
                 try {
                     const res = await fetch('/api/companies', {
@@ -351,7 +351,7 @@
 
                     const companiesData = await res.json();
 
-                    companySelect.innerHTML = '<option value="">? Choisir une entreprise ?</option>';
+                    companySelect.innerHTML = '<option value="">– Choisir une entreprise</option>';
 
                     companiesData.forEach(company => {
                         const option = document.createElement('option');
@@ -384,7 +384,7 @@
                 siteSelect.disabled = true;
 
                 if (!companyId) {
-                    siteSelect.innerHTML = '<option value="">– Sélectionnez d\'abord une entreprise ?</option>';
+                    siteSelect.innerHTML = '<option value="">– Sélectionnez d\'abord une entreprise</option>';
                     return;
                 }
 
@@ -406,7 +406,7 @@
                         return;
                     }
 
-                    siteSelect.innerHTML = '<option value="">? Choisir un site ?</option>';
+                    siteSelect.innerHTML = '<option value="">– Choisir un site</option>';
 
                     sites.forEach(site => {
                         const option = document.createElement('option');

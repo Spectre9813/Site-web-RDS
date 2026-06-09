@@ -253,7 +253,12 @@ class CompanyRepository
                     c.sector_id_company,
                     c.sector_id_company AS sector_id,
                     s.name_business_sector,
-                    s.name_business_sector AS sector_name
+                    s.name_business_sector AS sector_name,
+                    (SELECT GROUP_CONCAT(DISTINCT cs.city_company_site ORDER BY cs.city_company_site SEPARATOR ', ')
+                        FROM company_site cs
+                        WHERE cs.company_id_company_site = c.id_company
+                          AND cs.city_company_site IS NOT NULL
+                          AND cs.city_company_site <> '') AS location
                 FROM company c
                 LEFT JOIN business_sector s
                     ON c.sector_id_company = s.id_business_sector

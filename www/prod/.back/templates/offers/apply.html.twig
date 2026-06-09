@@ -1,6 +1,6 @@
 {#
 ================================================================================
-  apply.html.twig ? Student Job Application Form
+  apply.html.twig — Student Job Application Form
 ================================================================================
 
 PURPOSE:
@@ -16,7 +16,7 @@ ROUTE: GET /app/offers/{id}/apply | POST /app/offers/{id}/apply
 
 {% extends "base.html.twig" %}
 
-{% block title %}Postuler ? {{ offer.title }} ? StageFlow{% endblock %}
+{% block title %}Postuler à {{ offer.title }} — StageFlow{% endblock %}
 
 {% block body %}
 
@@ -29,7 +29,7 @@ ROUTE: GET /app/offers/{id}/apply | POST /app/offers/{id}/apply
 			<h1 class="mt-1">Postuler à cette offre</h1>
 			<p>
 				{{ offer.title }}
-				?
+				—
 				<strong>{{ offer.company_name }}</strong>
 				à
 				{{ offer.location }}
@@ -40,7 +40,7 @@ ROUTE: GET /app/offers/{id}/apply | POST /app/offers/{id}/apply
 	{# --- ERROR NOTIFICATION --- #}
 	{% if error %}
 		<div class="notice notice-error mb-2">
-			<div class="notice-icon">??</div>
+			<div class="notice-icon">⚠️</div>
 			<p><strong>Erreur :</strong> {{ error }}</p>
 		</div>
 	{% endif %}
@@ -50,7 +50,7 @@ ROUTE: GET /app/offers/{id}/apply | POST /app/offers/{id}/apply
 		<aside>
 			{# Offer Summary #}
 			<div class="card user-card">
-				<div class="avatar-circle">?</div>
+				<div class="avatar-circle">🏢</div>
 				<h3>{{ offer.company_name }}</h3>
 				<p class="text-sm text-muted">{{ offer.location }}</p>
 
@@ -90,7 +90,7 @@ ROUTE: GET /app/offers/{id}/apply | POST /app/offers/{id}/apply
 				</div>
 
 				<a href="/profile" class="text-sm text-muted" style="display: inline-block; margin-top: 0.75rem;">
-					?? Modifier mon profil
+					✏️ Modifier mon profil
 				</a>
 			</div>
 
@@ -102,11 +102,11 @@ ROUTE: GET /app/offers/{id}/apply | POST /app/offers/{id}/apply
 
 				<div class="data-grid">
 					<div class="data-item">
-						<span class="data-label">?? Vues</span>
+						<span class="data-label">👁️ Vues</span>
 						<span class="data-value">{{ views|default(0) }}</span>
 					</div>
 					<div class="data-item">
-						<span class="data-label">? Candidatures</span>
+						<span class="data-label">📋 Candidatures</span>
 						<span class="data-value">{{ applications|default(0) }}</span>
 					</div>
 				</div>
@@ -132,17 +132,17 @@ ROUTE: GET /app/offers/{id}/apply | POST /app/offers/{id}/apply
 				<div class="form-group mb-3">
 					<label for="cv_id">Choisir un CV déjà utilisé</label>
 					<select name="cv_path" id="cv_id">
-						<option value="" selected>? Chargement de vos CVs? ?</option>
+						<option value="" selected>⏳ Chargement de vos CV…</option>
 					</select>
 				</div>
 
 				<p class="text-sm text-muted" style="text-align: center; margin: 1rem 0;">
-					 ou déposez un nouveau fichier ?
+					 ou déposez un nouveau fichier 👇
 				</p>
 
 				<div class="form-group mb-3">
 					<label id="cv-drop-zone" class="file-dropzone">
-						<span id="cv-drop-icon" class="file-dropzone-icon">?</span>
+						<span id="cv-drop-icon" class="file-dropzone-icon">📄</span>
 						<p id="cv-drop-label" class="file-dropzone-title">Déposez votre CV ici</p>
 						<p class="file-dropzone-subtitle">ou cliquez pour parcourir (PDF max 2 Mo)</p>
 						<input type="file" name="cv_file" id="cv_file_input" accept=".pdf" class="file-input-hidden">
@@ -159,17 +159,17 @@ ROUTE: GET /app/offers/{id}/apply | POST /app/offers/{id}/apply
 				<div class="form-group mb-3">
 					<label for="motivation_id">Choisir une lettre existante</label>
 					<select name="cover_letter_path" id="motivation_id">
-						<option value="" selected>? Chargement de vos lettres? ?</option>
+						<option value="" selected>⏳ Chargement de vos lettres…</option>
 					</select>
 				</div>
 
 				<p class="text-sm text-muted" style="text-align: center; margin: 1rem 0;">
-					 ou déposez un nouveau fichier ?
+					 ou déposez un nouveau fichier 👇
 				</p>
 
 				<div class="form-group mb-3">
 					<label id="motivation-drop-zone" class="file-dropzone">
-						<span id="motivation-drop-icon" class="file-dropzone-icon">?</span>
+						<span id="motivation-drop-icon" class="file-dropzone-icon">📝</span>
 						<p id="motivation-drop-label" class="file-dropzone-title">Déposez votre lettre ici</p>
 						<p class="file-dropzone-subtitle">ou cliquez pour parcourir (PDF max 2 Mo)</p>
 						<input type="file" name="cover_letter_file" id="motivation_file_input" accept=".pdf" class="file-input-hidden">
@@ -178,8 +178,8 @@ ROUTE: GET /app/offers/{id}/apply | POST /app/offers/{id}/apply
 
 				{# FORM ACTIONS #}
 				<div style="margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px dashed var(--border-color); display: flex; justify-content: space-between; align-items: center;">
-					<a href="/app/offers/show/{{ offer.id }}" class="text-sm text-muted">? Annuler</a>
-					<button type="submit" class="btn btn-primary" id="submitBtn">? Envoyer ma candidature</button>
+					<a href="/app/offers/show/{{ offer.id }}" class="text-sm text-muted">✕ Annuler</a>
+					<button type="submit" class="btn btn-primary" id="submitBtn">📨 Envoyer ma candidature</button>
 				</div>
 			</form>
 		</section>
@@ -223,13 +223,13 @@ ROUTE: GET /app/offers/{id}/apply | POST /app/offers/{id}/apply
 			};
 
 			const resetDropZone = (icon, label, zone, defaultText) => {
-				icon.textContent = '?';
+				icon.textContent = '📄';
 				label.textContent = defaultText;
 				zone.classList.remove('active');
 			};
 
 			const setDropZoneSuccess = (icon, label, zone, fileName) => {
-				icon.textContent = '?';
+				icon.textContent = '✅';
 				label.textContent = fileName;
 				zone.classList.add('active');
 			};
@@ -246,7 +246,7 @@ ROUTE: GET /app/offers/{id}/apply | POST /app/offers/{id}/apply
 					selectEl.innerHTML = '';
 
 					if (!files || files.length === 0) {
-						selectEl.innerHTML = '<option value="" disabled selected>? Aucun fichier enregistré ?</option>';
+						selectEl.innerHTML = '<option value="" disabled selected>📭 Aucun fichier enregistré</option>';
 						return;
 					}
 
@@ -266,7 +266,7 @@ ROUTE: GET /app/offers/{id}/apply | POST /app/offers/{id}/apply
 						selectEl.appendChild(opt);
 					});
 				} catch (error) {
-					selectEl.innerHTML = '<option value="" disabled selected>? Erreur de chargement ?</option>';
+					selectEl.innerHTML = '<option value="" disabled selected>⚠️ Erreur de chargement</option>';
 				}
 			}
 
@@ -316,7 +316,7 @@ ROUTE: GET /app/offers/{id}/apply | POST /app/offers/{id}/apply
 
 			// Initialization
 			loadExistingFiles('/api/profile/get-cvs', cvSelect, '– Sélectionner un CV –');
-			loadExistingFiles('/api/profile/get-lms', lmSelect, '– Sélectionner une lettre ?');
+			loadExistingFiles('/api/profile/get-lms', lmSelect, '– Sélectionner une lettre');
 
 			bindDropZone(cvDropZone, cvInput, cvSelect, cvIcon, cvLabel, 'Déposez votre CV ici');
 			bindDropZone(lmDropZone, lmInput, lmSelect, lmIcon, lmLabel, 'Déposez votre lettre ici');

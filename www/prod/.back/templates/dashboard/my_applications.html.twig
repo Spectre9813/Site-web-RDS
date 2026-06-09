@@ -2,7 +2,7 @@
 
 {% block title %}
     {% if is_student %}
-        Mes candidatures ? StageFlow
+        Mes candidatures - StageFlow
     {% else %}
         Candidatures de {{ student.first_name|default('') }} {{ student.last_name|default('') }} ? StageFlow
     {% endif %}
@@ -31,7 +31,7 @@
     </div>
 
     <div class="notice notice-info">
-        <div class="notice-icon">?</div>
+        <div class="notice-icon">ℹ️</div>
         <p>
             Il y a actuellement
             <strong>{{ applications|length }} candidature{{ applications|length > 1 ? 's' : '' }}</strong>

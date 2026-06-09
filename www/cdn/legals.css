@@ -641,7 +641,7 @@
 }
 
 .delete-account-container .delete-list li::before {
-    content: "?";
+    content: "✕";
     position: absolute;
     left: 0;
     color: #dc3545;
@@ -649,7 +649,7 @@
 }
 
 .delete-account-container .retain-list li::before {
-    content: "?";
+    content: "✓";
     position: absolute;
     left: 0;
     color: #007bff;

@@ -71,6 +71,27 @@ class ApplicationRepository
         return $success;
     }
 
+    /**
+     * Vérifie si l'étudiant a déjà candidaté à cette offre.
+     * Sert à empêcher les candidatures en double.
+     */
+    public function existsForStudentAndOffer(int|string $studentId, int|string $offerId): bool
+    {
+        $sql = "SELECT 1
+                FROM application
+                WHERE student_id_application = :student_id
+                  AND offer_id_application = :offer_id
+                LIMIT 1";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            ':student_id' => (int) $studentId,
+            ':offer_id'   => (int) $offerId,
+        ]);
+
+        return (bool) $stmt->fetchColumn();
+    }
+
     public function isOwner(int|string $appId, int|string $userId): bool
     {
         $app = $this->findById((int) $appId);

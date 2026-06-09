@@ -1,5 +1,5 @@
 /* ===================================================
-   STAGEFLOW ? LAYOUT.CSS
+   STAGEFLOW — LAYOUT.CSS
    Structural layout: wrapper, main, page headers, profile grid, footer
    =================================================== */
 
@@ -106,18 +106,17 @@ footer {
 
 .dashboard-shell {
     display: grid;
-    grid-template-columns: 280px minmax(0, 1fr);
-    gap: 1.5rem;
+    grid-template-columns: 1fr;
+    gap: 1rem;
     align-items: start;
 }
 
 .dashboard-sidebar {
-    position: sticky;
-    top: 1.25rem;
+    position: static;
     background: var(--clr-surface);
     border: 1px solid var(--clr-border);
     border-radius: var(--border-radius);
-    padding: 1.25rem;
+    padding: 0.9rem;
     box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
 }
 
@@ -151,8 +150,9 @@ footer {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    min-height: 48px;
-    padding: 0.85rem 1rem;
+    width: 100%;
+    min-height: 46px;
+    padding: 0.8rem 0.9rem;
     border: 1px solid var(--clr-border);
     border-radius: 12px;
     background: var(--clr-surface);
@@ -194,13 +194,13 @@ footer {
    RESPONSIVE
    =================================================== */
 
-@media (max-width: 960px) {
+/* >= 641px : tablette - la sidebar passe en bandeau, le menu en ligne */
+@media (min-width: 641px) {
     .dashboard-shell {
-        grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
 
     .dashboard-sidebar {
-        position: static;
         padding: 1rem;
     }
 
@@ -210,27 +210,32 @@ footer {
     }
 
     .dashboard-menu-link {
+        width: auto;
         flex: 1 1 220px;
+        min-height: 48px;
+        padding: 0.85rem 1rem;
     }
 }
 
-@media (max-width: 640px) {
+/* >= 961px : desktop - vraie colonne laterale collante */
+@media (min-width: 961px) {
     .dashboard-shell {
-        gap: 1rem;
+        grid-template-columns: 280px minmax(0, 1fr);
     }
 
     .dashboard-sidebar {
-        padding: 0.9rem;
+        position: sticky;
+        top: 1.25rem;
+        padding: 1.25rem;
     }
 
     .dashboard-menu {
         flex-direction: column;
+        flex-wrap: nowrap;
     }
 
     .dashboard-menu-link {
-        width: 100%;
-        min-height: 46px;
-        padding: 0.8rem 0.9rem;
+        flex: 0 1 auto;
     }
 }
 

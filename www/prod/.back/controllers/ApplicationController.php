@@ -164,8 +164,19 @@ class ApplicationController extends BaseController
         $basePath = '/var/www/html/cdn/uploads/';
         $uploadDir = $basePath . $subFolder . '/';
 
+        // Crée le dossier si besoin. Le second is_dir() couvre le cas où un autre
+        // process l'aurait créé entre-temps (race condition).
         if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0755, true);
+            if (!mkdir($uploadDir, 0755, true) && !is_dir($uploadDir)) {
+                error_log("handleFileUpload: impossible de créer le dossier d'upload : {$uploadDir}");
+                return null;
+            }
+        }
+
+        // Vérifie que le dossier est bien accessible en écriture avant d'aller plus loin.
+        if (!is_writable($uploadDir)) {
+            error_log("handleFileUpload: dossier d'upload non accessible en écriture : {$uploadDir}");
+            return null;
         }
 
         // Generate unique filename
@@ -173,6 +184,7 @@ class ApplicationController extends BaseController
         $destination = $uploadDir . $filename;
 
         if (!move_uploaded_file($file['tmp_name'], $destination)) {
+            error_log("handleFileUpload: échec move_uploaded_file vers {$destination}");
             return null;
         }
 

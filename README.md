@@ -328,17 +328,17 @@ docker exec -i lamp-db mysql --default-character-set=utf8mb4 -u website-local -p
 - [x] Flash messages utilisateurs
 - [x] Routage backend propre
 - [x] Intégration Twig sur les vues principales
+- [x] Gestion complète des entreprises (notation terminée ; création / édition / suppression à finaliser)
+- [x] Gestion complète des entreprises (notation terminée ; création / édition / suppression à finaliser)
+- [x] Gestion complète des pilotes
+- [x] Gestion complète des étudiants
+- [x] Vue complète des candidatures par étudiant
+- [x] Vue candidatures élèves pour le pilote
+- [x] Mentions légales
 
 ### En cours / à finaliser
 
-- [ ] Gestion complète des entreprises (notation terminée ; création / édition / suppression à finaliser)
-- [ ] Gestion complète des pilotes
-- [ ] Gestion complète des étudiants
-- [ ] Vue complète des candidatures par étudiant
-- [ ] Vue candidatures élèves pour le pilote
-- [ ] Statistiques avancées
 - [ ] Tests unitaires complets
-- [ ] Mentions légales
 - [ ] `robots.txt` et `sitemap.xml`
 
 ## 🏗️ Architecture

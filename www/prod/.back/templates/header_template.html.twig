@@ -63,7 +63,7 @@
 
 				<div class="nav-footer">
 					<span>Thème</span>
-					<button id="theme-toggle" class="btn btn-theme" type="button">? Dark</button>
+					<button id="theme-toggle" class="btn btn-theme" type="button">🌙 Dark</button>
 				</div>
 			</div>
 		</nav>
@@ -223,10 +223,10 @@
 		const setTheme = function (theme) {
 			if (theme === 'dark') {
 				document.documentElement.setAttribute('data-theme', 'dark');
-				themeToggle.textContent = '?? Light';
+				themeToggle.textContent = '☀️ Light';
 			} else {
 				document.documentElement.removeAttribute('data-theme');
-				themeToggle.textContent = '? Dark';
+				themeToggle.textContent = '🌙 Dark';
 			}
 
 			try {

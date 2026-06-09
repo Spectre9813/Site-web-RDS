@@ -4,7 +4,7 @@
     {% if is_student %}
         Mes candidatures - StageFlow
     {% else %}
-        Candidatures de {{ student.first_name|default('') }} {{ student.last_name|default('') }} ? StageFlow
+        Candidatures de {{ student.first_name|default('') }} {{ student.last_name|default('') }} — StageFlow
     {% endif %}
 {% endblock %}
 
@@ -163,7 +163,7 @@
             </span>
 
             {% if page < totalPages %}
-                <a href="?page={{ page + 1 }}" class="btn btn-ghost">Suivant ?</a>
+                <a href="?page={{ page + 1 }}" class="btn btn-ghost">Suivant →</a>
             {% endif %}
         </div>
     {% endif %}

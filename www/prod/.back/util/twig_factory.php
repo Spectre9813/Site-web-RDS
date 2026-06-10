@@ -40,6 +40,11 @@ class TwigFactory
 
             // ? Single source of truth for user ? always from Util, not raw $_SESSION
             self::$twig->addGlobal('user', Util::getUser() ?? null);
+
+            // Token CSRF disponible globalement (deux alias pour cohErence avec les templates existants)
+            $csrfToken = Util::getCSRFToken();
+            self::$twig->addGlobal('csrf_token', $csrfToken);
+            self::$twig->addGlobal('csrf', $csrfToken);
         }
 
         return self::$twig;

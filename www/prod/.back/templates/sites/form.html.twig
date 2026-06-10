@@ -16,6 +16,7 @@
 
     <div class="card" style="max-width: 600px; margin: 0 auto;">
         <form action="/app/sites/save" method="POST" class="form-stack">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
             {# Hidden fields for logic #}
             <input type="hidden" name="id" value="{{ site.id|default('new') }}">
             <input type="hidden" name="company_id" value="{{ company.id }}">

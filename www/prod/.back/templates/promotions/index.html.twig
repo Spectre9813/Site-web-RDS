@@ -62,6 +62,7 @@
 </div>
 
 <script>
+const CSRF_TOKEN    = '{{ csrf_token }}';
 const campusSelect  = document.getElementById('campus-select');
 const tableBody     = document.querySelector('#promotion-table tbody');
 const promoModal    = document.getElementById('promo-modal');
@@ -174,7 +175,7 @@ tableBody.addEventListener('click', async e => {
         const id = e.target.closest('.delete-btn').dataset.id;
         if (!confirm('Supprimer cette promotion ?')) return;
         try {
-            const res = await fetch(`/api/promotions/${id}`, { method: 'DELETE' });
+            const res = await fetch(`/api/promotions/${id}`, { method: 'DELETE', headers: { 'X-CSRF-TOKEN': CSRF_TOKEN } });
             if (!res.ok) throw new Error('Erreur lors de la suppression');
             loadPromotions(campusSelect.value);
         } catch (err) {
@@ -197,7 +198,7 @@ promoForm.addEventListener('submit', async e => {
     try {
         const res = await fetch(`/api/campus/${campusSelect.value}/promotions`, {
             method:  'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF_TOKEN },
             body:    JSON.stringify(payload),
         });
 

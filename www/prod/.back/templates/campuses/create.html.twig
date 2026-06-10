@@ -23,6 +23,7 @@
 
     <div class="card" style="padding: 2rem; max-width: 720px;">
         <form method="POST" action="/dashboard/campus/new">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
             <div class="form-group" style="margin-bottom: 1.25rem;">
                 <label for="name_campus">Nom du campus</label>
                 <input type="text"

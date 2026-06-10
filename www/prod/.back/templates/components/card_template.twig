@@ -36,6 +36,7 @@
                     Modifier
                 </a>
                 <form action="/app/offers/delete/{{ offer.id }}" method="POST" onsubmit="return confirm('Supprimer cette offre ?');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                     <button type="submit" class="btn btn-danger">
                         Supprimer
                     </button>

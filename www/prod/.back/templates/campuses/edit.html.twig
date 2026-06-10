@@ -17,6 +17,7 @@
     {% endif %}
 
     <form method="POST" action="/dashboard/campus/edit/{{ campus.id_campus }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <div class="form-group">
             <label>Nom du campus</label>
             <input type="text" name="name_campus" value="{{ campus.name_campus }}" required>

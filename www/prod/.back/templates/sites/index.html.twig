@@ -63,6 +63,7 @@
                                         <a href="/app/sites/{{ site.id }}?company_id={{ company.id }}" class="btn btn-ghost btn-sm">Modifier</a>
                                         
                                         <form action="/app/sites/delete/{{ site.id }}" method="POST" onsubmit="return confirm('Supprimer ce site ?');" style="margin:0;">
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                                             <input type="hidden" name="company_id" value="{{ company.id }}">
                                             <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
                                         </form>
